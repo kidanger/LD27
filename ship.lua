@@ -60,6 +60,9 @@ end
 
 function ship:draw()
 	set_alpha(255)
+	if self.dying then
+		set_alpha(120)
+	end
 	set_color(self.color)
 
 	local x, y = self.body:get_position()
