@@ -32,6 +32,13 @@ function update(dt)
 	timer.update(dt)
 end
 
+function set_state(_state)
+	state = _state
+	if state.on_enter then
+		state:on_enter()
+	end
+end
+
 
 --[[===================
 ----======= DRAW ======]]

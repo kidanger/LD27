@@ -151,15 +151,14 @@ function gamestate:draw()
 end
 
 function gamestate:update(dt)
-	local lvl = ct.levels[self.level]
 	if self.arrived then
 		if self.level < ct.max_level then
 			-- sound
 			self:change_level(self.level + 1)
-			self.arrived = false
 		else
-			-- the end
+			set_state(require 'ending')
 		end
+		self.arrived = false
 	end
 	if self.ship.health == 0 and not self.ship.dying then
 		self.ship:die(2)
