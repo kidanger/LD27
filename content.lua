@@ -26,7 +26,7 @@ function ct.load()
 	ct.images.spritesheet = load_surface('spritesheet.png')
 	draw_from(ct.images.spritesheet)
 
-	ct.fonts.small = font.load('space_age.ttf', 20)
+	ct.fonts.small = font.load('space_age.ttf', 16)
 	ct.fonts.normal = font.load('space_age.ttf', 32)
 	ct.fonts.big = font.load('space_age.ttf', 46)
 

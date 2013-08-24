@@ -57,7 +57,7 @@ function ship:draw()
 	local R = self.level.ratio
 
 	local sprite = ct.sprites.ship
-	if self.activated then
+	if self.activated and self.fuel > 0 and self.health > 0 then
 		sprite = ct.sprites.ship_engine
 	end
 	local transform = {
@@ -70,7 +70,7 @@ function ship:draw()
 end
 
 function ship:update(dt)
-	if self.activated then
+	if self.activated and self.health > 0 then
 		if self.fuel > 0 then
 			local df = math.min(self.fuel, dt)
 			local angle = self.body:get_angle()
@@ -78,6 +78,7 @@ function ship:update(dt)
 			local dy = math.sin(angle) * df * self.engine_power
 			self.body:apply_linear_impulse(dx, dy)
 			self.fuel = self.fuel - df
+			-- sound
 		else
 			-- sound
 		end
@@ -91,6 +92,7 @@ function ship:update(dt)
 
 	if self.collisions > 0 then
 		self:take_damage(dt)
+		-- sound
 	end
 end
 
@@ -118,6 +120,7 @@ function ship:regen_health()
 	local health = self.max_health
 	self.health_handle = timer.tween(0.7, self, {health=health}, 'bounce')
 	self.health_handle.dst = health
+	-- sound
 end
 
 function ship:regen_fuel()
@@ -128,6 +131,7 @@ function ship:collide()
 	local dmgx, dmgy = self.body:get_linear_velocity()
 	local dmg = (math.abs(dmgx) + math.abs(dmgy)) / 20
 	self:take_damage(dmg)
+	-- sound
 end
 
 function ship:get_screen_x()

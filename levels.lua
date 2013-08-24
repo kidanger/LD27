@@ -1,4 +1,5 @@
 local physic = require 'physic'
+local hsl = require 'hsl'
 
 local Level = {
 	buffer=nil,
@@ -53,6 +54,7 @@ function Level:draw(offsetx, offsety)
 
 		set_color(50, 50, 50)
 		for i, b in pairs(self.boxes) do
+			set_color(b.color)
 			local w, h = b.w*R, b.h*R
 			local x = b.x * R
 			local y = b.y * R
@@ -89,8 +91,14 @@ function Level:draw(offsetx, offsety)
 	end
 end
 
-local function load_level(name)
+local function load_level(name, hue)
 	local level = require(name)
+
+	local function gencolor()
+		local s = math.random(20, 40)/100
+		local l = math.random(30, 50)/100
+		return hsl(hue+math.random(-5,5), s, l)
+	end
 
 	level.start.w = 3
 	level.start.h = 3
@@ -100,6 +108,16 @@ local function load_level(name)
 	level.arrival.h = 3
 	level.arrival.color = {0, 0, 255}
 
+	local color = hsl(hue, 0.5, 0.7)
+	level.background = {
+		math.min(255, color[1]+90),
+		math.min(255, color[2]+90),
+		math.min(255, color[3]+90),
+	}
+
+	for _, b in pairs(level.boxes) do
+		b.color = gencolor()
+	end
 	for _, c in pairs(level.capsules) do
 		c.color = {255, 0, 0}
 		c.size = 0.5
@@ -110,8 +128,8 @@ local function load_level(name)
 end
 
 local levels = {
-	load_level('level1'),
-	load_level('level2'),
+	load_level('level1', 130),
+	load_level('level2', 10),
 }
 
 return levels

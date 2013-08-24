@@ -25,8 +25,6 @@ When the engine is used, the countdown appears.
 TODO
 ====
 
-Show fuel status
-
 Level color
 
 fix gravity center

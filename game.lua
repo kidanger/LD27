@@ -54,8 +54,10 @@ function gamestate:change_level(lvlnumber)
 		elseif other.is_capsule then
 			local c = other.parent
 			if c.type == 'health' then
+				-- sound
 				self.ship:regen_health()
 			else
+				-- sound
 				self.ship:regen_fuel()
 			end
 			table.insert(self.capsules_to_remove, c)
@@ -72,13 +74,18 @@ function gamestate:change_level(lvlnumber)
 end
 
 local function coolround(num)
-	return math.floor(num*10)/10
+	local n = math.floor(num*10)/10
+	if n == math.floor(n) then
+		return n .. '.0'
+	end
+	return n
 end
 function gamestate:draw()
-	set_color(200, 200, 200)
-	draw_background()
-
 	local lvl = ct.levels[self.level]
+
+	set_alpha(255)
+	set_color(lvl.background)
+	draw_background()
 
 	local sx = self.scrollx - self.ship:get_screen_x() + width/2
 	local sy = self.scrolly - self.ship:get_screen_y() + height/2
@@ -108,11 +115,13 @@ function gamestate:draw()
 	draw_rect(x, y, math.ceil(w*(self.ship.health / self.ship.max_health)), h)
 	font.use(ct.fonts.small)
 	set_color(0, 0, 0)
-	font.draw_align('health: ' .. coolround(self.ship.health), x + w/2, y, 'center')
+	font.draw_align('health: ' .. coolround(self.ship.health), x + w/2, y+2, 'center')
 	
 	-- draw fuel
 	font.use(ct.fonts.big)
 	set_color(math.min(255, (1 - self.ship.fuel/self.ship.max_fuel)*255), 0, 0)
+	set_color(0,0,0)
+	set_alpha(math.min(255, (1 - self.ship.fuel/self.ship.max_fuel)*255))
 	local text = 'Fuel: ' .. coolround(self.ship.fuel) .. ' seconds'
 	font.draw_align(text, width/2, 100, 'center')
 end
@@ -130,6 +139,7 @@ function gamestate:update(dt)
 	self.capsules_to_remove = {}
 	if self.arrived then
 		if self.level < ct.max_level then
+			-- sound
 			self:change_level(self.level + 1)
 		else
 			-- the end
