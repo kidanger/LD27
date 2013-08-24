@@ -6,6 +6,8 @@ local particle = require 'particle'
 -- 'web', I don't know yet
 local timer = require 'hump/timer'
 
+local ct = require 'content'
+
 width, height = 600, 480
 
 local state = {}
