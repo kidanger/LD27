@@ -49,6 +49,10 @@ function ship:init(level, x, y)
 	self.die_ended = false
 	self.collisions = 0
 	self.health_handle = nil
+
+	self.left = false
+	self.right = false
+	self.activated = false
 end
 
 function ship:destroy()
