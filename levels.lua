@@ -52,13 +52,21 @@ function Level:draw(offsetx, offsety)
 		push_offset(0, 0)
 		local R = self.ratio
 
-		set_color(50, 50, 50)
 		for i, b in pairs(self.boxes) do
-			set_color(b.color)
 			local w, h = b.w*R, b.h*R
 			local x = b.x * R
 			local y = b.y * R
+			local outline = 4
+
+			set_color(b.outoutcolor)
 			draw_rect(x, y, w, h)
+
+			set_color(b.outcolor)
+			draw_rect(x+outline, y+outline, w-outline*2, h-outline*2)
+
+			outline = outline * 2
+			set_color(b.color)
+			draw_rect(x+outline, y+outline, w-outline*2, h-outline*2)
 		end
 
 		pop_offset()
@@ -94,10 +102,13 @@ end
 local function load_level(name, hue)
 	local level = require(name)
 
-	local function gencolor()
-		local s = math.random(20, 40)/100
+	local function gencolors()
+		local h = (hue+math.random(-5,5)) % 360
+		local s = math.random(50, 70)/100
 		local l = math.random(30, 50)/100
-		return hsl(hue+math.random(-5,5), s, l)
+		return hsl(h, s, l),
+				hsl(h, s, l-0.2),
+				hsl(h, s, l-0.4)
 	end
 
 	level.start.w = 3
@@ -108,15 +119,11 @@ local function load_level(name, hue)
 	level.arrival.h = 3
 	level.arrival.color = {0, 0, 255}
 
-	local color = hsl(hue, 0.5, 0.7)
-	level.background = {
-		math.min(255, color[1]+90),
-		math.min(255, color[2]+90),
-		math.min(255, color[3]+90),
-	}
+	local color = hsl(hue, 0.5, 0.8)
+	level.background = color
 
 	for _, b in pairs(level.boxes) do
-		b.color = gencolor()
+		b.color, b.outcolor, b.outoutcolor = gencolors()
 	end
 	for _, c in pairs(level.capsules) do
 		c.color = {255, 0, 0}
@@ -129,7 +136,7 @@ end
 
 local levels = {
 	load_level('level1', 130),
-	load_level('level2', 10),
+	load_level('level2', 0),
 }
 
 return levels

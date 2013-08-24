@@ -119,9 +119,9 @@ function gamestate:draw()
 	
 	-- draw fuel
 	font.use(ct.fonts.big)
-	set_color(math.min(255, (1 - self.ship.fuel/self.ship.max_fuel)*255), 0, 0)
+	--set_color(math.min(255, (1 - self.ship.fuel/self.ship.max_fuel)*255), 0, 0)
 	set_color(0,0,0)
-	set_alpha(math.min(255, (1 - self.ship.fuel/self.ship.max_fuel)*255))
+	set_alpha(math.min(255, math.max(100, (1 - self.ship.fuel/self.ship.max_fuel)*255)))
 	local text = 'Fuel: ' .. coolround(self.ship.fuel) .. ' seconds'
 	font.draw_align(text, width/2, 100, 'center')
 end
