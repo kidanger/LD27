@@ -2,6 +2,7 @@ local physic = require 'physic'
 local hsl = require 'hsl'
 
 local Level = {
+	hue=0,
 	buffer=nil,
 }
 Level.__index = Level
@@ -65,6 +66,20 @@ function Level:draw(offsetx, offsety)
 		push_offset(0, 0)
 		local R = self.ratio
 
+		set_alpha(255)
+		local start = self.start
+		local function sign() return math.random(1, 2) == 1 and 1 or -1 end
+		for i = 1, math.random(20, 40) do
+			local x = math.random(start.x-20, start.x+20)
+			local y = math.random(start.y-20, start.y+20)
+			local s = math.random(70, 90) / 100
+			local l = math.random(70, 90) / 100
+			set_color(hsl((self.hue+math.random(-5, 5))%360, s, l))
+			local x2, y2 = x+math.random(40, 80)*sign(), y+math.random(70, 150)*sign()
+			local x3, y3 = x+math.random(70, 150)*sign(), y+math.random(40, 80)*sign()
+			draw_triangle(x*R, y*R, x2*R, y2*R, x3*R, y3*R)
+		end
+
 		for i, b in pairs(self.boxes) do
 			local w, h = b.w*R, b.h*R
 			local x = b.x * R
@@ -126,6 +141,8 @@ local function load_level(name, hue)
 				hsl(h, s, l-0.2),
 				hsl(h, s, l-0.4)
 	end
+
+	level.hue = hue
 
 	level.start.w = 3
 	level.start.h = 3

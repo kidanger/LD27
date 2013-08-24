@@ -26,7 +26,6 @@ TODO
 Sounds
 Ending
 Random triangle in background
-Redo images
 
 lvl1: text distance, duration
 -0.1hp still alive
