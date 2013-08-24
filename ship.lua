@@ -9,7 +9,6 @@ local ship = {
 
 	body=nil,
 
-	colliding=true,
 	health=10,
 	max_health=10,
 
@@ -25,6 +24,9 @@ local ship = {
 	collisions=0,
 
 	level=nil,
+
+	dying=false,
+	die_ended=false,
 }
 
 function ship:init(level, x, y)
@@ -41,11 +43,19 @@ function ship:init(level, x, y)
 	self.level = level
 	self.fuel = self.max_fuel
 	self.health = self.max_health
+	self.dying = false
+	self.die_ended = false
+	self.collisions = 0
+	self.health_handle = nil
 end
+
 function ship:destroy()
 	assert(self.body)
 	self.body:destroy()
 	self.body = nil
+	if self.health_handle then
+		timer.cancel(self.health_handle)
+	end
 end
 
 function ship:draw()
@@ -91,9 +101,29 @@ function ship:update(dt)
 	end
 
 	if self.collisions > 0 then
+		print('const collision')
 		self:take_damage(dt)
 		-- sound
 	end
+end
+
+function ship:die(duration)
+	self.dying = true
+	local function sign() return math.random(1, 2) == 1 and 1 or -1 end
+	local dx, dy = math.random(40, 40)*sign(), math.random(40, 40)*sign()
+	timer.add(duration, function() self.die_ended = true end)
+
+	local cumul = 5
+	local function randomstuff()
+		self.body:set_linear_velocity(dx, dy)
+		cumul = cumul * 1.7
+		self.body:set_angular_velocity(cumul)
+	end
+	randomstuff()
+	timer.addPeriodic(0.3, function()
+		randomstuff()
+		return not self.die_ended and self.dying
+	end, math.max(0, duration/0.3 - 2))
 end
 
 function ship:take_damage(dmg)
@@ -130,6 +160,7 @@ end
 function ship:collide()
 	local dmgx, dmgy = self.body:get_linear_velocity()
 	local dmg = (math.abs(dmgx) + math.abs(dmgy)) / 20
+	print('collide', dmg)
 	self:take_damage(dmg)
 	-- sound
 end

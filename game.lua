@@ -48,7 +48,8 @@ function gamestate:change_level(lvlnumber)
 	local lvl = ct.levels[self.level]
 	lvl:init()
 	self.ship:init(lvl, lvl.start.x, lvl.start.y)
-	self.ship.body.begin_collide = function(ship, other)
+	self.ship.body.begin_collide = function(_, other)
+		if self.ship.dying then return end
 		if other == lvl.arrival.body then
 			self.arrived = true
 		elseif other.is_capsule then
@@ -67,6 +68,7 @@ function gamestate:change_level(lvlnumber)
 		end
 	end
 	self.ship.body.end_collide = function(ship, other)
+		if self.ship.dying then return end
 		if other.is_wall then
 			self.ship.collisions = self.ship.collisions - 1
 		end
@@ -141,9 +143,16 @@ function gamestate:update(dt)
 		if self.level < ct.max_level then
 			-- sound
 			self:change_level(self.level + 1)
+			self.arrived = false
 		else
 			-- the end
 		end
+	end
+	if self.ship.health == 0 and not self.ship.dying then
+		self.ship:die(2)
+	end
+	if self.ship.die_ended then
+		self:change_level(self.level)
 	end
 	ship:update(dt)
 	physic.update(dt)
