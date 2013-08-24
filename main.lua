@@ -17,6 +17,7 @@ local gamestate = require 'game'
 ----======= INIT ======]]
 function init()
 	resize(width, height)
+	ct.load()
 	state = gamestate
 	gamestate:change_level(1)
 end

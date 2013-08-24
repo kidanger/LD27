@@ -8,6 +8,8 @@ Level.__index = Level
 function Level:init()
 	for i, b in pairs(self.boxes) do
 		local shape = physic.new_shape('box', b.w, b.h)
+		shape:set_friction(0)
+		shape:set_restitution(0.35)
 		b.body = physic.new_body(shape, false)
 		b.body:set_position(b.x + b.w/2, b.y + b.h/2) -- cause the box is centered
 	end
@@ -24,6 +26,7 @@ function Level:draw(offsetx, offsety)
 		self.buffer = new_buffer()
 		use_buffer(self.buffer)
 
+		push_offset(0, 0)
 		local R = self.ratio
 
 		set_color(50, 50, 50)
@@ -41,6 +44,7 @@ function Level:draw(offsetx, offsety)
 		set_color(st.color)
 		draw_rect(st.x*R, st.y*R, st.w*R, st.h*R)
 
+		pop_offset()
 
 		use_buffer()
 	end

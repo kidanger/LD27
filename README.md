@@ -25,8 +25,9 @@ When the engine is used, the countdown appears.
 TODO
 ====
 
-Ship image
-ship drawing, update, controls
+
+fix gravity center
+fix ship image
 
 Tomorrow
 ========

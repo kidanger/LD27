@@ -31,10 +31,12 @@ function gamestate:draw()
 
 	local lvl = ct.levels[self.level]
 
-	push_offset(- self.scrollx / 2, self.scrolly / 2)
-	
-	lvl:draw(self.scrollx, self.scrolly)
+	local sx = self.scrollx - self.ship:get_screen_x() + width/2
+	local sy = self.scrolly - self.ship:get_screen_y() + height/2
 
+	push_offset(sx, sy)
+
+	lvl:draw(-sx*2, sy*2)
 	self.ship:draw()
 
 	pop_offset()
@@ -77,7 +79,7 @@ function gamestate:mouse_release(x, y, b)
 end
 function gamestate:mouse_motion(x, y, dx, dy)
 	if scrolling then
-		self.scrollx = self.scrollx - dx*2
+		self.scrollx = self.scrollx + dx*2
 		self.scrolly = self.scrolly + dy*2
 	end
 end
