@@ -111,6 +111,7 @@ end
 
 local levels = {
 	load_level('level1'),
+	load_level('level2'),
 }
 
 return levels

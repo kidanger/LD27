@@ -89,3 +89,4 @@ def convert(name):
 
 if __name__ == '__main__':
     convert('level1')
+    convert('level2')

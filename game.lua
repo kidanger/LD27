@@ -12,7 +12,7 @@ local gamestate = {
 	capsules_to_remove={},
 }
 
-physic.create_world(0, 4)
+physic.create_world(0, 4.5)
 
 function presolve(b1, b2)
 	local collide = true
@@ -71,6 +71,9 @@ function gamestate:change_level(lvlnumber)
 	end
 end
 
+local function coolround(num)
+	return math.floor(num*10)/10
+end
 function gamestate:draw()
 	set_color(200, 200, 200)
 	draw_background()
@@ -101,11 +104,17 @@ function gamestate:draw()
 	h = 16
 	draw_rect(x, y, w, h)
 
-	set_color(255, 0, 0)
-	draw_rect(x, y, w*(self.ship.health / self.ship.max_health), h)
+	set_color(210, 0, 0)
+	draw_rect(x, y, math.ceil(w*(self.ship.health / self.ship.max_health)), h)
+	font.use(ct.fonts.small)
+	set_color(0, 0, 0)
+	font.draw_align('health: ' .. coolround(self.ship.health), x + w/2, y, 'center')
 	
 	-- draw fuel
 	font.use(ct.fonts.big)
+	set_color(math.min(255, (1 - self.ship.fuel/self.ship.max_fuel)*255), 0, 0)
+	local text = 'Fuel: ' .. coolround(self.ship.fuel) .. ' seconds'
+	font.draw_align(text, width/2, 100, 'center')
 end
 
 function gamestate:update(dt)

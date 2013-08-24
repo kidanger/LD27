@@ -35,10 +35,12 @@ function ship:init(level, x, y)
 	self.body = physic.new_body(shape, true)
 	self.body:set_position(x + realw / 2, y + realh / 2)
 	self.body:set_angular_damping(5)
-	self.body:set_linear_damping(0.4)
+	self.body:set_linear_damping(0.2)
 	self.body:set_mass_center(realw*0.1, 0)
 
 	self.level = level
+	self.fuel = self.max_fuel
+	self.health = self.max_health
 end
 function ship:destroy()
 	assert(self.body)
@@ -69,11 +71,16 @@ end
 
 function ship:update(dt)
 	if self.activated then
-		local angle = self.body:get_angle()
-		local dx = math.cos(angle) * dt * self.engine_power
-		local dy = math.sin(angle) * dt * self.engine_power
-		self.body:apply_linear_impulse(dx, dy)
-		self.fuel = self.fuel - dt
+		if self.fuel > 0 then
+			local df = math.min(self.fuel, dt)
+			local angle = self.body:get_angle()
+			local dx = math.cos(angle) * df * self.engine_power
+			local dy = math.sin(angle) * df * self.engine_power
+			self.body:apply_linear_impulse(dx, dy)
+			self.fuel = self.fuel - df
+		else
+			-- sound
+		end
 	end
 	if self.right then
 		self.body:set_angular_velocity(20*dt + self.body:get_angular_velocity())
@@ -88,16 +95,29 @@ function ship:update(dt)
 end
 
 function ship:take_damage(dmg)
+	if self.health_handle then
+		timer.cancel(self.health_handle)
+		self.health = self.health_handle.dst
+	end
 	local health = self.health - dmg
 	if health < 0 then
 		health = 0
 	end
-	timer.tween(1, self, {health=health})
+	self.health_handle = timer.tween(0.7, self, {health=health}, 'bounce')
+	self.health_handle.dst = health
 end
 
 function ship:regen_health()
-	--self.health = self.max_health
-	timer.tween(1, self, {health=self.max_health})
+	if self.health_handle then
+		if self.health_handle.dst == self.max_health then
+			return
+		end
+		timer.cancel(self.health_handle)
+		self.health = self.health_handle.dst
+	end
+	local health = self.max_health
+	self.health_handle = timer.tween(0.7, self, {health=health}, 'bounce')
+	self.health_handle.dst = health
 end
 
 function ship:regen_fuel()
