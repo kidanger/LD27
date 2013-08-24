@@ -25,6 +25,10 @@ When the engine is used, the countdown appears.
 TODO
 ====
 
+Implements capsule
+Collision with walls => health --
+Collision with end => level ++
+
 
 fix gravity center
 fix ship image
@@ -35,6 +39,7 @@ Tomorrow
 Menu
 Particles
 Tweening!
+Sounds
 Ending
 
 

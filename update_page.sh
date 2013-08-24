@@ -5,7 +5,7 @@ cd ../drystal
 ./runner.py LD27 repack
 cd LD27
 
-git checkout gh-pages
+git checkout gh-pages || exit
 cp ../drystal/build-web/*compress* .
 cp ../drystal/build-web/index.html .
 du -sh *
