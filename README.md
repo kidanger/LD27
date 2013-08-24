@@ -25,7 +25,9 @@ When the engine is used, the countdown appears.
 TODO
 ====
 
-Level color
+Sounds
+
+Ending
 
 fix gravity center
 fix ship image
@@ -36,6 +38,4 @@ Tomorrow
 Menu
 Particles
 Tweening!
-Sounds
-Ending
 
