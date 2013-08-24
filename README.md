@@ -26,8 +26,9 @@ TODO
 ====
 
 Sounds
-
+Levels
 Ending
+Random triangle in background
 
 fix gravity center
 fix ship image

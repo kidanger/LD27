@@ -35,10 +35,12 @@ function ship:init(level, x, y)
 	local realh = self.h * 0.5
 	local shape = physic.new_shape('box', realw, realh, realw*0.1, 0)
 	self.body = physic.new_body(shape, true)
-	self.body:set_position(x + realw / 2, y + realh / 2)
+	self.body:set_position(x, y)
 	self.body:set_angular_damping(5)
 	self.body:set_linear_damping(0.2)
 	self.body:set_mass_center(realw*0.1, 0)
+	self.body:set_angle(- math.pi/2)
+	self.body:set_linear_velocity(0, -3)
 
 	self.level = level
 	self.fuel = self.max_fuel

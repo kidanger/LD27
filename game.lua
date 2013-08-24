@@ -76,6 +76,7 @@ end
 
 local function coolround(num)
 	local n = math.floor(num*10)/10
+	if n == 0 and num ~= 0 then n = '0.1' end
 	if n == math.floor(n) then
 		return n .. '.0'
 	end
@@ -164,6 +165,9 @@ function gamestate:key_release(key)
 		self.ship:stop_rotateright()
 	elseif key == 'left' then
 		self.ship:stop_rotateleft()
+	end
+	if key == 'f6' then
+		self.arrived = true
 	end
 end
 

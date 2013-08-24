@@ -141,6 +141,9 @@ end
 local levels = {
 	load_level('level1', 130),
 	load_level('level2', 0),
+	load_level('level3', 220), -- go up
+	load_level('level4', 30), -- snail
+	load_level('level5', 280), -- go down
 }
 
 return levels

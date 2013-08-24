@@ -88,5 +88,7 @@ def convert(name):
 
 
 if __name__ == '__main__':
-    convert('level1')
-    convert('level2')
+    import os
+    for f in os.listdir('.'):
+        if f.startswith('level') and f.endswith('.png'):
+            convert(f.replace('.png', ''))
