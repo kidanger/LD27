@@ -1,4 +1,5 @@
 local physic = require 'physic'
+local timer = require 'hump/timer'
 local ct = require 'content'
 
 local ship = {
@@ -87,14 +88,16 @@ function ship:update(dt)
 end
 
 function ship:take_damage(dmg)
-	self.health = self.health - dmg
-	if self.health < 0 then
-		self.health = 0
+	local health = self.health - dmg
+	if health < 0 then
+		health = 0
 	end
+	timer.tween(1, self, {health=health})
 end
 
 function ship:regen_health()
-	self.health = self.max_health
+	--self.health = self.max_health
+	timer.tween(1, self, {health=self.max_health})
 end
 
 function ship:regen_fuel()

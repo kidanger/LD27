@@ -1,4 +1,5 @@
 local physic = require 'physic'
+local font = require 'truetype'
 local ct = require 'content'
 local ship = require 'ship'
 
@@ -89,14 +90,22 @@ function gamestate:draw()
 	-- draw health
 	set_alpha(200)
 	set_color(0, 0, 0)
+	local x, y = 10, 10
 	local w = 140
 	local h = 20
-	draw_rect(10, 10, w, h)
+	draw_rect(x, y, w, h)
+
+	set_color(120, 120, 120)
+	x, y = 12, 12
+	w = 136
+	h = 16
+	draw_rect(x, y, w, h)
 
 	set_color(255, 0, 0)
-	draw_rect(10, 10, w*(self.ship.health / self.ship.max_health), h)
+	draw_rect(x, y, w*(self.ship.health / self.ship.max_health), h)
 	
 	-- draw fuel
+	font.use(ct.fonts.big)
 end
 
 function gamestate:update(dt)

@@ -27,9 +27,6 @@ TODO
 
 Show fuel status
 
-Implement capsules
-Collision with walls => health --
-
 Level color
 
 fix gravity center
