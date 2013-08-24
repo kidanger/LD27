@@ -26,12 +26,12 @@ TODO
 ====
 
 Sounds
-Levels
 Ending
 Random triangle in background
+Redo images
 
 fix gravity center
-fix ship image
+
 
 Tomorrow
 ========
@@ -40,3 +40,4 @@ Menu
 Particles
 Tweening!
 
+More levels

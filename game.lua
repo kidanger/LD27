@@ -9,19 +9,12 @@ local gamestate = {
 	scrollx=0,
 	scrolly=0,
 	arrived=false,
+
+	display_text='',
+	text_collides=0,
 }
 
 physic.create_world(0, 4.5)
-
-function presolve(b1, b2)
-	local collide = true
-	if b1.collide_with and not b1:collide_with(b2) then
-		collide = false
-	elseif b2.collide_with and not b2:collide_with(b1) then
-		collide = false
-	end
-	return collide
-end
 
 physic.on_collision(
 	function (b1, b2)
@@ -31,8 +24,7 @@ physic.on_collision(
 	function (b1, b2)
 		if b1.end_collide then b1:end_collide(b2) end
 		if b2.end_collide then b2:end_collide(b1) end
-	end,
-	presolve
+	end
 )
 
 function gamestate:change_level(lvlnumber)
@@ -43,6 +35,7 @@ function gamestate:change_level(lvlnumber)
 	end
 
 	self.level = lvlnumber
+	self.display_text = ''
 
 	local lvl = ct.levels[self.level]
 	lvl:init()
@@ -64,12 +57,20 @@ function gamestate:change_level(lvlnumber)
 		elseif other.is_wall then
 			self.ship:collide()
 			self.ship.collisions = self.ship.collisions + 1
+		elseif other.is_text then
+			self.display_text = other.parent.string
+			self.text_collides = self.text_collides + 1
 		end
 	end
 	self.ship.body.end_collide = function(ship, other)
 		if self.ship.dying then return end
 		if other.is_wall then
 			self.ship.collisions = self.ship.collisions - 1
+		elseif other.is_text then
+			self.text_collides = self.text_collides - 1
+			if self.text_collides == 0 then
+				self.display_text = ''
+			end
 		end
 	end
 end
@@ -81,6 +82,12 @@ local function coolround(num)
 		return n .. '.0'
 	end
 	return n
+end
+local function lines(str)
+	local t = {}
+	local function helper(line) table.insert(t, line) return "" end
+	helper((str:gsub("(.-)\r?\n", helper)))
+	return t
 end
 function gamestate:draw()
 	local lvl = ct.levels[self.level]
@@ -126,6 +133,16 @@ function gamestate:draw()
 	set_alpha(math.min(255, math.max(100, (1 - self.ship.fuel/self.ship.max_fuel)*255)))
 	local text = 'Fuel: ' .. coolround(self.ship.fuel) .. ' seconds'
 	font.draw_align(text, width/2, 100, 'center')
+
+	if self.display_text ~= '' then
+		font.use(ct.fonts.normal)
+		set_color(0,0,0)
+		set_alpha(200)
+		local _, h = font.sizeof(self.display_text)
+		for i, l in ipairs(lines(self.display_text)) do
+			font.draw_align(l, width/2, height - 130 + h*i, 'center')
+		end
+	end
 end
 
 function gamestate:update(dt)

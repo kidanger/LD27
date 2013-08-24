@@ -48,5 +48,13 @@ boxes={
 	{y=229, x=113, w=8, h=1},
 	{y=234, x=113, w=8, h=1},
 },
+texts={
+},
+textdata={
+	"",
+	"",
+	"",
+	"",
+},
 }
 return level

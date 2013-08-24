@@ -17,10 +17,10 @@ function Level:init()
 	end
 	do
 		local ar = self.arrival
-		local shape = physic.new_shape('circle', ar.w)
+		local shape = physic.new_shape('circle', ar.w / 2)
 		shape:set_sensor(true)
 		ar.body = physic.new_body(shape, false)
-		ar.body:set_position(ar.x + ar.w/2, ar.y + ar.h/2)
+		ar.body:set_position(ar.x, ar.y)
 	end
 	for _, c in pairs(self.capsules) do
 		local shape = physic.new_shape('circle', c.size)
@@ -31,6 +31,15 @@ function Level:init()
 		c.body.parent = c
 		c.is_visible = true
 	end
+	for _, t in pairs(self.texts) do
+		local shape = physic.new_shape('box', t.w, t.h)
+		shape:set_sensor(true)
+		t.body = physic.new_body(shape, false)
+		t.body:set_position(t.x + t.w/2, t.y + t.h/2) -- cause the box is centered
+		t.body.is_text = true
+		t.body.parent = t
+		t.string = self.textdata[t.text]
+	end
 end
 
 function Level:destroy()
@@ -40,6 +49,9 @@ function Level:destroy()
 	self.arrival.body:destroy()
 	for _, c in pairs(self.capsules) do
 		c.body:destroy()
+	end
+	for _, t in pairs(self.texts) do
+		t.body:destroy()
 	end
 end
 
@@ -140,7 +152,7 @@ end
 
 local levels = {
 	load_level('level1', 130),
-	load_level('level2', 0),
+	load_level('level2', 100), -- cave
 	load_level('level3', 220), -- go up
 	load_level('level4', 30), -- snail
 	load_level('level5', 280), -- go down

@@ -27,7 +27,7 @@ function ct.load()
 	draw_from(ct.images.spritesheet)
 
 	ct.fonts.small = font.load('space_age.ttf', 16)
-	ct.fonts.normal = font.load('space_age.ttf', 32)
+	ct.fonts.normal = font.load('space_age.ttf', 26)
 	ct.fonts.big = font.load('space_age.ttf', 46)
 
 --	ct.sounds.consume_fuel = load_sound('consume_fuel.wav')

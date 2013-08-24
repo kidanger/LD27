@@ -1,0 +1,4 @@
+Hey, use <up> to use the engine,\nand <right/left> to rotate the ship.
+Welcome in this colored world,\nit's better than Earth, right ?
+Those little things are Fuel Capsules,\nthey help to last more than 10 seconds.
+And there are some Health Capsules,\nif your health is at zero, your ship explodes.

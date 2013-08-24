@@ -8,15 +8,59 @@ START = 255, 0, 0
 ARRIVAL = 0, 255, 0
 FUEL = 0, 0, 255
 HEALTH = 255, 0, 255
+TEXT1 = 0, 255, 255
+TEXT2 = 255, 255, 0
+TEXT3 = 0, 127, 127
+TEXT4 = 130, 127, 0
+
+def search(src, x, y, color):
+    dx = 0
+    dy = 0
+
+    # search box height
+    while True:
+        p = src.getpixel((x, y+dy))
+        if p != color:
+            break
+        dy += 1
+
+    while True:
+        isvalid = True
+        for ddy in range(dy):
+            p = src.getpixel((x+dx, y+ddy))
+            if p != color:
+                isvalid = False
+                break
+        if not isvalid:
+            break
+        dx += 1
+
+    # erase the box
+    for ddx in range(dx):
+        for ddy in range(dy):
+            src.putpixel((x+ddx, y+ddy), VOID)
+    return dx, dy
+
 
 def convert(name):
     pngname = name + '.png'
     luaname = name + '.lua'
+    textname = name + '.txt'
 
     start = {'x':0, 'y':0}
     arrival = {'x':0, 'y':0}
     boxes = []
     capsules = []
+    texts = []
+
+    data = ['', '', '', '']
+    try:
+        tmpdata = open(textname).read().strip().split('\n')
+        for i, d in enumerate(tmpdata):
+            data[i] = d
+    except IOError:
+        pass
+
 
     src = Image.open(pngname)
     for x in range(src.size[0]):
@@ -34,37 +78,26 @@ def convert(name):
                 capsules += [{'type':'fuel', 'x': x, 'y': y}]
             elif color == HEALTH:
                 capsules += [{'type':'health', 'x': x, 'y': y}]
+            elif color == TEXT1:
+                dx, dy = search(src, x, y, color)
+                texts += [{'x': x, 'y': y, 'w': dx, 'h': dy, 'text': 1}]
+            elif color == TEXT2:
+                dx, dy = search(src, x, y, color)
+                texts += [{'x': x, 'y': y, 'w': dx, 'h': dy, 'text': 2}]
+            elif color == TEXT3:
+                dx, dy = search(src, x, y, color)
+                texts += [{'x': x, 'y': y, 'w': dx, 'h': dy, 'text': 3}]
+            elif color == TEXT4:
+                dx, dy = search(src, x, y, color)
+                texts += [{'x': x, 'y': y, 'w': dx, 'h': dy, 'text': 4}]
             elif color[0] == color[1] == color[2]:
-                dx = 0
-                dy = 0
-
-                # search box height
-                while True:
-                    p = src.getpixel((x, y+dy))
-                    if p != color:
-                        break
-                    dy += 1
-
-                while True:
-                    isvalid = True
-                    for ddy in range(dy):
-                        p = src.getpixel((x+dx, y+ddy))
-                        if p != color:
-                            isvalid = False
-                            break
-                    if not isvalid:
-                        break
-                    dx += 1
-
-                # erase the box
-                for ddx in range(dx):
-                    for ddy in range(dy):
-                        src.putpixel((x+ddx, y+ddy), VOID)
-
+                dx, dy = search(src, x, y, color)
                 boxes += [{'x': x, 'y': y, 'w': dx, 'h': dy}]
                 print(color, boxes[-1])
 
     def tolua(var):
+        if type(var) == str:
+            return '"' + var + '"'
         if type(var) == dict:
             print('dict:', var)
             return repr(var).replace(': ', '=').replace("'", '').replace('health', '"health"').replace('fuel', '"fuel"')
@@ -81,6 +114,8 @@ def convert(name):
     luacode += 'arrival=' + tolua(arrival) + ',\n'
     luacode += 'capsules=' + tolua(capsules) + ',\n'
     luacode += 'boxes=' + tolua(boxes) + ',\n'
+    luacode += 'texts=' + tolua(texts) + ',\n'
+    luacode += 'textdata=' + tolua(data) + ',\n'
     luacode += '}\nreturn level'
     print(luacode)
     dst = open(luaname, 'w')
@@ -88,7 +123,10 @@ def convert(name):
 
 
 if __name__ == '__main__':
-    import os
-    for f in os.listdir('.'):
-        if f.startswith('level') and f.endswith('.png'):
-            convert(f.replace('.png', ''))
+    if True:
+        import os
+        for f in os.listdir('.'):
+            if f.startswith('level') and f.endswith('.png'):
+                convert(f.replace('.png', ''))
+    else:
+        convert('level1')
