@@ -24,7 +24,6 @@ TODO
 ====
 
 Sounds
-Ending
 
 -0.1hp still alive
 
