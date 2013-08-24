@@ -62,10 +62,10 @@ texts={
 	{y=58, x=81, text=1, w=9, h=1},
 },
 textdata={
-	"Hey, use <up> to use the engine,\nand <right/left> to rotate the ship.",
-	"Welcome in this colored world,\nit's better than Earth, right ?",
-	"Those little things are Fuel Capsules,\nthey help to last more than 10 seconds.",
-	"And there are some Health Capsules,\nif your health is at zero, your ship explodes.",
+	"Hey, use {b100|up} to use the engine,\nand {b100|right/left} to rotate the ship.",
+	"Welcome in this {r255|g0|b0|c}{r255|g127|b0|o}{r255|g255|b0|l}{r0|g255|b0|o}{r0|g0|b255|r}{r75|g0|b130|e}{r143|g0|b255|d} world,\nit's better than Earth, right ?",
+	"Those little things are {big|Fuel Capsules},\nthey help to last more than {r0|g100|b0|10 seconds}.",
+	"And there are some {big|Health Capsules},\nif your health is at zero, your ship {r255|g0|b0|explodes}.",
 },
 }
 return level

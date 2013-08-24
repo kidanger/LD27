@@ -138,10 +138,12 @@ function gamestate:draw()
 		font.use(ct.fonts.normal)
 		set_color(0,0,0)
 		set_alpha(200)
+		font.use_color(true)
 		local _, h = font.sizeof(self.display_text)
 		for i, l in ipairs(lines(self.display_text)) do
-			font.draw_align(l, width/2, height - 130 + h*i, 'center')
+			font.draw_align(l, width/2, height - 130 + (h+4)*i, 'center')
 		end
+		font.use_color(false)
 	end
 end
 

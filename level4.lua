@@ -49,9 +49,10 @@ boxes={
 	{y=234, x=113, w=8, h=1},
 },
 texts={
+	{y=194, x=46, text=1, w=38, h=21},
 },
 textdata={
-	"",
+	"I know 10 seconds is short.\nBut {r255|you} have voted that.",
 	"",
 	"",
 	"",
