@@ -7,9 +7,33 @@ local gamestate = {
 	ship=ship,
 	scrollx=0,
 	scrolly=0,
+	arrived=false,
+	capsules_to_remove={},
 }
 
 physic.create_world(0, 4)
+
+function presolve(b1, b2)
+	local collide = true
+	if b1.collide_with and not b1:collide_with(b2) then
+		collide = false
+	elseif b2.collide_with and not b2:collide_with(b1) then
+		collide = false
+	end
+	return collide
+end
+
+physic.on_collision(
+	function (b1, b2)
+		if b1.begin_collide then b1:begin_collide(b2) end
+		if b2.begin_collide then b2:begin_collide(b1) end
+	end,
+	function (b1, b2)
+		if b1.end_collide then b1:end_collide(b2) end
+		if b2.end_collide then b2:end_collide(b1) end
+	end,
+	presolve
+)
 
 function gamestate:change_level(lvlnumber)
 	if self.level ~= 0 then
@@ -23,6 +47,27 @@ function gamestate:change_level(lvlnumber)
 	local lvl = ct.levels[self.level]
 	lvl:init()
 	self.ship:init(lvl, lvl.start.x, lvl.start.y)
+	self.ship.body.begin_collide = function(ship, other)
+		if other == lvl.arrival.body then
+			self.arrived = true
+		elseif other.is_capsule then
+			local c = other.parent
+			if c.type == 'health' then
+				self.ship:regen_health()
+			else
+				self.ship:regen_fuel()
+			end
+			table.insert(self.capsules_to_remove, c)
+		else -- is wall, of course
+			self.ship:collide()
+			self.ship.collisions = self.ship.collisions + 1
+		end
+	end
+	self.ship.body.end_collide = function(ship, other)
+		if other.is_wall then
+			self.ship.collisions = self.ship.collisions - 1
+		end
+	end
 end
 
 function gamestate:draw()
@@ -40,9 +85,38 @@ function gamestate:draw()
 	self.ship:draw()
 
 	pop_offset()
+
+	-- draw health
+	set_alpha(200)
+	set_color(0, 0, 0)
+	local w = 140
+	local h = 20
+	draw_rect(10, 10, w, h)
+
+	set_color(255, 0, 0)
+	draw_rect(10, 10, w*(self.ship.health / self.ship.max_health), h)
+	
+	-- draw fuel
 end
 
 function gamestate:update(dt)
+	local lvl = ct.levels[self.level]
+	for _, c in ipairs(self.capsules_to_remove) do
+		for i, cc in pairs(lvl.capsules) do
+			if cc == c then
+				table.remove(lvl.capsules, i)
+				break
+			end
+		end
+	end
+	self.capsules_to_remove = {}
+	if self.arrived then
+		if self.level < ct.max_level then
+			self:change_level(self.level + 1)
+		else
+			-- the end
+		end
+	end
 	ship:update(dt)
 	physic.update(dt)
 end

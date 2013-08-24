@@ -67,7 +67,7 @@ def convert(name):
     def tolua(var):
         if type(var) == dict:
             print('dict:', var)
-            return repr(var).replace(': ', '=').replace("'", '')
+            return repr(var).replace(': ', '=').replace("'", '').replace('health', '"health"').replace('fuel', '"fuel"')
         if type(var) == list:
             print('list:', var)
             string = '{\n'

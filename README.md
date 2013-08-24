@@ -25,10 +25,12 @@ When the engine is used, the countdown appears.
 TODO
 ====
 
-Implements capsule
-Collision with walls => health --
-Collision with end => level ++
+Show fuel status
 
+Implement capsules
+Collision with walls => health --
+
+Level color
 
 fix gravity center
 fix ship image
@@ -41,13 +43,4 @@ Particles
 Tweening!
 Sounds
 Ending
-
-
-DONE
-====
-
-content.lua which can load image/font
-Level converter .png -> .lua
-level.lua: create boxes and stuff, and bufferize it
-
 

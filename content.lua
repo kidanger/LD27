@@ -12,15 +12,17 @@ local ct = {
 		background = {y=64+256, y=0, w=256, h=256},
 		ship = {x=0, y=0, w=64, h=64},
 		ship_engine = {x=64, y=0, w=64, h=64},
-		fuel_capsule = {x=64, y=0, w=32, h=32},
-		health_capsule = {x=64+32, y=0, w=32, h=32},
+		fuel_capsule = {x=128+16, y=0, w=16, h=16},
+		health_capsule = {x=128+32, y=0, w=16, h=16},
+		start = {x=192, y=0, w=32, h=32},
+		arrival = {x=224, y=0, w=32, h=32},
 	},
-	levels = {
-		unpack(require 'levels'),
-	},
+	levels = require 'levels',
 }
 
 function ct.load()
+	ct.max_level = #ct.levels
+
 	ct.images.spritesheet = load_surface('spritesheet.png')
 	draw_from(ct.images.spritesheet)
 

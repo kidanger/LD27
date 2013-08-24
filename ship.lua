@@ -9,7 +9,7 @@ local ship = {
 	body=nil,
 
 	colliding=true,
-	health=0,
+	health=10,
 	max_health=10,
 
 	activated=false,
@@ -21,14 +21,16 @@ local ship = {
 	right=false,
 	left=false,
 
+	collisions=0,
+
 	level=nil,
 }
 
 function ship:init(level, x, y)
 	assert(not self.body)
 	local realw = self.w * 0.8
-	local realh = self.h * 0.8
-	local shape = physic.new_shape('box', realw, realh)
+	local realh = self.h * 0.5
+	local shape = physic.new_shape('box', realw, realh, realw*0.1, 0)
 	self.body = physic.new_body(shape, true)
 	self.body:set_position(x + realw / 2, y + realh / 2)
 	self.body:set_angular_damping(5)
@@ -78,6 +80,31 @@ function ship:update(dt)
 	if self.left then
 		self.body:set_angular_velocity(-20*dt + self.body:get_angular_velocity())
 	end
+
+	if self.collisions > 0 then
+		self:take_damage(dt)
+	end
+end
+
+function ship:take_damage(dmg)
+	self.health = self.health - dmg
+	if self.health < 0 then
+		self.health = 0
+	end
+end
+
+function ship:regen_health()
+	self.health = self.max_health
+end
+
+function ship:regen_fuel()
+	self.fuel = self.max_fuel
+end
+
+function ship:collide()
+	local dmgx, dmgy = self.body:get_linear_velocity()
+	local dmg = (math.abs(dmgx) + math.abs(dmgy)) / 20
+	self:take_damage(dmg)
 end
 
 function ship:get_screen_x()
