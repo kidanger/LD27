@@ -25,11 +25,8 @@ When the engine is used, the countdown appears.
 TODO
 ====
 
-Level converter .png -> .lua
 Ship image
-
-level.lua: create boxes and stuff, and bufferize it
-
+ship drawing, update, controls
 
 Tomorrow
 ========
@@ -44,4 +41,7 @@ DONE
 ====
 
 content.lua which can load image/font
+Level converter .png -> .lua
+level.lua: create boxes and stuff, and bufferize it
+
 
