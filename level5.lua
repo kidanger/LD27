@@ -187,9 +187,10 @@ boxes={
 	{y=178, x=189, w=1, h=2},
 },
 texts={
+	{y=22, x=146, text=1, w=34, h=17},
 },
 textdata={
-	"",
+	"Those walls are {40%|cracked}.\nAnyway, you should go down now.",
 	"",
 	"",
 	"",
