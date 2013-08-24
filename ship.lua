@@ -80,6 +80,10 @@ function ship:draw()
 		wfactor=self.w*R / sprite.w,
 		hfactor=self.h*R / sprite.h,
 	}
+	local angle = self.body:get_angle() % (math.pi*2)
+	if angle > math.pi/2 and angle < math.pi*3/2 then
+		transform.hfactor = transform.hfactor * -1
+	end
 	draw_sprite(sprite, (x-self.w/2)*R, (y-self.h/2)*R, transform)
 	set_alpha(100)
 end

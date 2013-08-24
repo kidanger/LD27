@@ -105,10 +105,11 @@ function Level:draw(offsetx, offsety)
 			local sprite
 			if c.type == 'fuel' then
 				sprite = ct.sprites.fuel_capsule
+				set_color(20, 20, 255)
 			else
 				sprite = ct.sprites.health_capsule
+				set_color(255, 0, 0)
 			end
-			set_color(c.color)
 			draw_sprite_resized(sprite, c.x*R-sprite.w/2, c.y*R-sprite.h/2)
 		end
 	end
@@ -141,7 +142,6 @@ local function load_level(name, hue)
 		b.color, b.outcolor, b.outoutcolor = gencolors()
 	end
 	for _, c in pairs(level.capsules) do
-		c.color = {255, 0, 0}
 		c.size = 0.5
 		c.visible = true
 	end
