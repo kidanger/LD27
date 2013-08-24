@@ -29,6 +29,7 @@ function Level:init()
 		c.body:set_position(c.x, c.y)
 		c.body.is_capsule = true
 		c.body.parent = c
+		c.is_visible = true
 	end
 end
 
@@ -88,14 +89,16 @@ function Level:draw(offsetx, offsety)
 	draw_sprite_resized(sprite, st.x*R - st.w*R/2, st.y*R - st.h*R/2, st.w*R, st.h*R)
 
 	for i, c in pairs(self.capsules) do
-		local sprite
-		if c.type == 'fuel' then
-			sprite = ct.sprites.fuel_capsule
-		else
-			sprite = ct.sprites.health_capsule
+		if c.is_visible then
+			local sprite
+			if c.type == 'fuel' then
+				sprite = ct.sprites.fuel_capsule
+			else
+				sprite = ct.sprites.health_capsule
+			end
+			set_color(c.color)
+			draw_sprite_resized(sprite, c.x*R-sprite.w/2, c.y*R-sprite.h/2)
 		end
-		set_color(c.color)
-		draw_sprite_resized(sprite, c.x*R-sprite.w/2, c.y*R-sprite.h/2)
 	end
 end
 
@@ -128,6 +131,7 @@ local function load_level(name, hue)
 	for _, c in pairs(level.capsules) do
 		c.color = {255, 0, 0}
 		c.size = 0.5
+		c.visible = true
 	end
 
 	level.ratio = 16

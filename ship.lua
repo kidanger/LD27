@@ -104,8 +104,8 @@ function ship:update(dt)
 	end
 
 	if self.collisions > 0 then
-		print('const collision')
-		self:take_damage(dt)
+		local factor = self.fuel > 0 and 1 or 5
+		self:take_damage(dt * factor)
 		-- sound
 	end
 end
@@ -138,7 +138,7 @@ function ship:take_damage(dmg)
 	if health < 0 then
 		health = 0
 	end
-	self.health_handle = timer.tween(0.7, self, {health=health}, 'bounce')
+	self.health_handle = timer.tween(0.7, self, {health=health})
 	self.health_handle.dst = health
 end
 
@@ -163,7 +163,6 @@ end
 function ship:collide()
 	local dmgx, dmgy = self.body:get_linear_velocity()
 	local dmg = (math.abs(dmgx) + math.abs(dmgy)) / 20
-	print('collide', dmg)
 	self:take_damage(dmg)
 	-- sound
 end

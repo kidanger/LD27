@@ -9,7 +9,6 @@ local gamestate = {
 	scrollx=0,
 	scrolly=0,
 	arrived=false,
-	capsules_to_remove={},
 }
 
 physic.create_world(0, 4.5)
@@ -52,7 +51,7 @@ function gamestate:change_level(lvlnumber)
 		if self.ship.dying then return end
 		if other == lvl.arrival.body then
 			self.arrived = true
-		elseif other.is_capsule then
+		elseif other.is_capsule and other.parent.is_visible then
 			local c = other.parent
 			if c.type == 'health' then
 				-- sound
@@ -61,8 +60,8 @@ function gamestate:change_level(lvlnumber)
 				-- sound
 				self.ship:regen_fuel()
 			end
-			table.insert(self.capsules_to_remove, c)
-		else -- is wall, of course
+			c.is_visible = false
+		elseif other.is_wall then
 			self.ship:collide()
 			self.ship.collisions = self.ship.collisions + 1
 		end
@@ -130,15 +129,6 @@ end
 
 function gamestate:update(dt)
 	local lvl = ct.levels[self.level]
-	for _, c in ipairs(self.capsules_to_remove) do
-		for i, cc in pairs(lvl.capsules) do
-			if cc == c then
-				table.remove(lvl.capsules, i)
-				break
-			end
-		end
-	end
-	self.capsules_to_remove = {}
 	if self.arrived then
 		if self.level < ct.max_level then
 			-- sound
