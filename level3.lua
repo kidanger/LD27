@@ -75,6 +75,7 @@ texts={
 	{y=129, x=113, text=2, w=11, h=13},
 	{y=224, x=113, text=1, w=11, h=1},
 	{y=128, x=114, text=2, w=10, h=1},
+	{y=198, x=116, text=1, w=8, h=13},
 },
 textdata={
 	"A {small|little} more complicated,\nto make sure you've understood the rules! :)",

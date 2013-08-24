@@ -72,8 +72,8 @@ function Level:draw(offsetx, offsety)
 		for i = 1, math.random(20, 40) do
 			local x = math.random(start.x-20, start.x+20)
 			local y = math.random(start.y-20, start.y+20)
-			local s = math.random(70, 90) / 100
-			local l = math.random(70, 90) / 100
+			local s = math.random(85, 100) / 100
+			local l = math.random(85, 100) / 100
 			set_color(hsl((self.hue+math.random(-5, 5))%360, s, l))
 			local x2, y2 = x+math.random(40, 80)*sign(), y+math.random(70, 150)*sign()
 			local x3, y3 = x+math.random(70, 150)*sign(), y+math.random(40, 80)*sign()

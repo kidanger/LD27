@@ -25,13 +25,12 @@ TODO
 
 Sounds
 Ending
-Random triangle in background
 
-lvl1: text distance, duration
 -0.1hp still alive
 
 fix gravity center
 
+autre font
 
 Tomorrow
 ========
@@ -39,5 +38,7 @@ Tomorrow
 Menu
 Particles
 Tweening!
+
+Tourelle
 
 More levels

@@ -1,1 +1,1 @@
-
+Welcome in this {r255|g0|b0|c}{r255|g127|b0|o}{r255|g255|b0|l}{r0|g255|b0|o}{r0|g0|b255|r}{r75|g0|b130|e}{r143|g0|b255|d} world,\nit's better than Earth, right ?

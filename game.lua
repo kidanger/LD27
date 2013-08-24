@@ -124,7 +124,7 @@ function gamestate:draw()
 	draw_rect(x, y, math.ceil(w*(self.ship.health / self.ship.max_health)), h)
 	font.use(ct.fonts.small)
 	set_color(0, 0, 0)
-	font.draw_align('health: ' .. coolround(self.ship.health), x + w/2, y+2, 'center')
+	font.draw_align('health: ' .. coolround(self.ship.health), x + w/2, y, 'center')
 	
 	-- draw fuel
 	font.use(ct.fonts.big)
@@ -136,11 +136,14 @@ function gamestate:draw()
 
 	if self.display_text ~= '' then
 		font.use(ct.fonts.normal)
-		set_color(0,0,0)
-		set_alpha(200)
 		font.use_color(true)
 		local _, h = font.sizeof(self.display_text)
-		for i, l in ipairs(lines(self.display_text)) do
+		local llines = lines(self.display_text)
+		set_color(255,255,255)
+		draw_rect(width*.1, height - 130 + h+4, width*.8, (h+4)*#llines+h/4)
+		set_color(0,0,0)
+		set_alpha(200)
+		for i, l in ipairs(llines) do
 			font.draw_align(l, width/2, height - 130 + (h+4)*i, 'center')
 		end
 		font.use_color(false)

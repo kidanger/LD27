@@ -74,9 +74,14 @@ boxes={
 	{y=85, x=211, w=10, h=23},
 },
 texts={
+	{y=54, x=57, text=1, w=9, h=24},
+	{y=54, x=66, text=1, w=16, h=8},
+	{y=63, x=66, text=1, w=32, h=15},
+	{y=62, x=67, text=1, w=34, h=1},
+	{y=63, x=98, text=1, w=3, h=7},
 },
 textdata={
-	"",
+	"Welcome in this {r255|g0|b0|c}{r255|g127|b0|o}{r255|g255|b0|l}{r0|g255|b0|o}{r0|g0|b255|r}{r75|g0|b130|e}{r143|g0|b255|d} world,\nit's better than Earth, right ?",
 	"",
 	"",
 	"",
