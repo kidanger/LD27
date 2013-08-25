@@ -118,7 +118,7 @@ function ship:destroy()
 		self.health_handle = nil
 	end
 	if self.size_handle then
-		timer.cancel(self.health_handle)
+		timer.cancel(self.size_handle)
 		self.size_handle = nil
 	end
 	self.fuel_part:stop()
@@ -213,19 +213,18 @@ end
 function ship:die(duration)
 	self.fuel_part:stop()
 	ct.play('explode')
-	self.dying = true
+
 	local function sign() return math.random(1, 2) == 1 and 1 or -1 end
-	local dx, dy = math.random(-20, 20)*sign(), math.random(-20, 20)*sign()
-	timer.add(duration, function() self.die_ended = true end)
+	local dx, dy = 30*sign(), 30*sign()
+	self.body:apply_angular_impulse(10)
+	self.body:set_angular_damping(0)
+	self.body:apply_linear_impulse(dx, dy)
 
 	if self.size_handle then
 		timer.cancel(self.size_handle)
 	end
 	self.size_handle = timer.tween(duration, self, {w=0.1, h=0.1}, 'in-out-quad')
 
-	self.body:set_angular_velocity(10)
-	self.body:set_angular_damping(0)
-	self.body:set_linear_velocity(dx, dy)
 
 	local x, y = self.body:get_position()
 	local R = self.level.ratio
@@ -233,6 +232,9 @@ function ship:die(duration)
 	self.explode_part:set_direction(0, math.pi*2)
 	self.explode_part:set_lifetime(duration)
 	self.explode_part:start()
+
+	self.dying = true
+	timer.add(duration, function() self.die_ended = true end)
 end
 
 function ship:take_damage(dmg)

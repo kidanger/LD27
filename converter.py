@@ -18,13 +18,13 @@ def search(src, x, y, color):
     dy = 0
 
     # search box height
-    while True:
+    while y+dy < src.size[1]:
         p = src.getpixel((x, y+dy))
         if p != color:
             break
         dy += 1
 
-    while True:
+    while x+dx < src.size[0]:
         isvalid = True
         for ddy in range(dy):
             p = src.getpixel((x+dx, y+ddy))
