@@ -300,6 +300,15 @@ function ship:collide()
 	self.collide_part:emit()
 	self.collide_part:emit()
 	self.collide_part:emit()
+
+	if self.size_handle then
+		timer.cancel(self.size_handle)
+	end
+	local w = math.min(self.ow*1.3, self.ow + math.abs(dmgy) / 20)
+	local h = math.min(self.oh*1.3, self.oh + math.abs(dmgx) / 20)
+	self.w = w
+	self.h = h
+	self.size_handle = timer.tween(0.5, self, {w=self.ow, h=self.oh}, 'in-bounce')
 end
 
 function ship:get_screen_x()
