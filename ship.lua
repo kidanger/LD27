@@ -6,12 +6,17 @@ local ct = require 'content'
 local ship = {
 	w=4, -- in meters
 	h=2.2,
+	ow=4,
+	oh=2.2,
 	color={255, 255, 255},
 
 	body=nil,
 
 	health=10,
 	max_health=10,
+
+	health_handle=nil,
+	size_handle=nil,
 
 	activated=false,
 	fuel=10,
@@ -72,6 +77,9 @@ ship.collide_part:set_offset(10, 10)
 
 function ship:init(level, x, y)
 	assert(not self.body)
+	self.w = self.ow
+	self.h = self.oh
+
 	local realw = self.w * 0.8
 	local realh = self.h * 0.5
 	local shape = physic.new_shape('box', realw, realh, realw*0.1, 0)
@@ -90,6 +98,7 @@ function ship:init(level, x, y)
 	self.die_ended = false
 	self.collisions = 0
 	self.health_handle = nil
+	self.size_handle = nil
 
 	self.left = false
 	self.right = false
@@ -106,6 +115,11 @@ function ship:destroy()
 	self.body = nil
 	if self.health_handle then
 		timer.cancel(self.health_handle)
+		self.health_handle = nil
+	end
+	if self.size_handle then
+		timer.cancel(self.health_handle)
+		self.size_handle = nil
 	end
 	self.fuel_part:stop()
 	self.collide_part:stop()
@@ -204,6 +218,11 @@ function ship:die(duration)
 	local dx, dy = math.random(-20, 20)*sign(), math.random(-20, 20)*sign()
 	timer.add(duration, function() self.die_ended = true end)
 
+	if self.size_handle then
+		timer.cancel(self.size_handle)
+	end
+	self.size_handle = timer.tween(duration, self, {w=0.1, h=0.1}, 'in-out-quad')
+
 	self.body:set_angular_velocity(10)
 	self.body:set_angular_damping(0)
 	self.body:set_linear_velocity(dx, dy)
@@ -229,6 +248,18 @@ function ship:take_damage(dmg)
 end
 
 function ship:regen_health()
+	ct.play('regen_health')
+
+	if self.size_handle then
+		timer.cancel(self.size_handle)
+	end
+	self.size_handle = timer.tween(0.5, self, {w=self.ow+1, h=self.oh+1}, 'in-bounce', function()
+		if self.size_handle then
+			timer.cancel(self.size_handle)
+		end
+		self.size_handle = timer.tween(0.5, self, {w=self.ow, h=self.oh}, 'quad')
+	end)
+
 	if self.health_handle then
 		if self.health_handle.dst == self.max_health then
 			return
@@ -238,7 +269,6 @@ function ship:regen_health()
 	end
 	local health = self.max_health
 	self:to_health(health, 'bounce')
-	ct.play('regen_health')
 end
 
 function ship:to_health(health, type)
