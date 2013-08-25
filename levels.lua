@@ -170,7 +170,7 @@ local function load_level(name, hue, angle)
 
 	level.arrival.w = 3
 	level.arrival.h = 3
-	level.arrival.color = {0, 0, 255}
+	level.arrival.color = {100, 100, 255}
 
 	local color = hsl(hue, 0.5, 0.8)
 	level.background = color

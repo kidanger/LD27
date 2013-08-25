@@ -131,6 +131,10 @@ function gamestate:draw()
 
 	pop_offset()
 
+	set_alpha(255)
+	set_color(0, 0, 0)
+	font.use(ct.fonts.small)
+	font.draw('Level: ' .. self.level .. '/' .. ct.max_level, 20, 3)
 	do -- draw health
 		set_alpha(200)
 		set_color(0, 0, 0)

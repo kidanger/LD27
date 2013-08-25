@@ -1,2 +1,2 @@
-{g255|Well done}, you have done the first part,\nbut the next levels won't be as easy!
+Well done, you have done the first part,\nbut the next levels won't be as easy!
 Because we {r200|g200|b100|love} {r210|g117|b157|fluttershy}!
