@@ -95,9 +95,9 @@ function Turret:fire(angle)
 
 	rocket.remove_me = false
 	rocket.body.begin_collide = function(_, o)
-		--if o ~= self then
-		--	rocket.remove_me = true
-		--end
+		if o.is_wall then
+			rocket.remove_me = true
+		end
 	end
 
 	table.insert(self.rockets, rocket)
