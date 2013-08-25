@@ -38,7 +38,7 @@ function ship:init(level, x, y)
 	self.body:set_position(x, y)
 	self.body:set_angular_damping(5)
 	self.body:set_linear_damping(0.2)
-	self.body:set_mass_center(realw*0.1, 0)
+	self.body:set_mass_center(0.4, 0)
 	self.body:set_angle(- math.pi/2)
 	self.body:set_linear_velocity(0, -3)
 

@@ -55,7 +55,9 @@ function gamestate:change_level(lvlnumber)
 			end
 			c.is_visible = false
 		elseif other.is_wall then
-			self.ship:collide()
+			if self.ship.collisions == 0 then
+				self.ship:collide()
+			end
 			self.ship.collisions = self.ship.collisions + 1
 		elseif other.is_text then
 			self.display_text = other.parent.string
@@ -160,7 +162,7 @@ function gamestate:update(dt)
 		end
 		self.arrived = false
 	end
-	if self.ship.health == 0 and not self.ship.dying then
+	if self.ship.health <= 0 and not self.ship.dying then
 		self.ship:die(2)
 	end
 	if self.ship.die_ended then
