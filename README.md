@@ -25,11 +25,9 @@ TODO
 
 Menu
 
-Turrets
-
 More levels
 
 Difficulty
 
-Sounds
+Space ship
 
