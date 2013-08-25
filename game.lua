@@ -10,6 +10,8 @@ local gamestate = {
 	scrolly=0,
 	arrived=false,
 
+	pause = false,
+
 	display_text='',
 	text_collides=0,
 }
@@ -148,9 +150,25 @@ function gamestate:draw()
 		end
 		font.use_color(false)
 	end
+
+	if self.pause then
+		set_alpha(150)
+		set_color(0, 0, 0)
+		draw_rect(0, 0, width, height)
+
+		set_alpha(255)
+		font.use(ct.fonts.big)
+		font.use_color(true)
+		font.draw_align('Pause', width/2, height*.4, 'center')
+		font.draw_align('Press {b50|P} to unpause', width/2, height*.6, 'center')
+		font.use_color(false)
+	end
 end
 
 function gamestate:update(dt)
+	if self.pause then
+		return
+	end
 	if self.arrived then
 		if self.level < ct.max_level then
 			ct.play('next_level')
@@ -177,6 +195,14 @@ function gamestate:key_press(key)
 		self.ship:rotateright()
 	elseif key == 'left' then
 		self.ship:rotateleft()
+	elseif key == 'p' then
+		self.pause = not self.pause
+	end
+	if key == 'f6' then
+		self.arrived = true
+	end
+	if key == 'f7' then
+		self.ship.health = 0
 	end
 end
 function gamestate:key_release(key)
@@ -186,12 +212,6 @@ function gamestate:key_release(key)
 		self.ship:stop_rotateright()
 	elseif key == 'left' then
 		self.ship:stop_rotateleft()
-	end
-	if key == 'f6' then
-		self.arrived = true
-	end
-	if key == 'f7' then
-		self.ship.health = 0
 	end
 end
 
