@@ -51,6 +51,7 @@ ship.fuel_part:add_color(1, 0, 0, 0)
 ship.fuel_part:set_lifetime(2.2)
 ship.fuel_part:set_initial_velocity(20)
 ship.fuel_part:set_initial_acceleration(50)
+ship.fuel_part:set_emission_rate(10)
 
 ship.explode_part:add_size(0, 3)
 ship.explode_part:add_size(.4, 10)
@@ -84,7 +85,7 @@ function ship:init(level, x, y)
 	local realh = self.h * 0.5
 	local shape = physic.new_shape('box', realw, realh)
 	self.body = physic.new_body(shape, true)
-	self.body:set_position(x, y)
+	self.body:set_position(x+0.5, y+0.5)
 	self.body:set_angular_damping(5)
 	self.body:set_linear_damping(0.2)
 	self.body:set_mass_center(0.4, 0)
@@ -309,7 +310,6 @@ function ship:collide()
 
 	local x, y = self.body:get_position()
 	local R = self.level.ratio
-	self.collide_part:set_position(x*R, y*R)
 	self.collide_part:emit()
 	self.collide_part:emit()
 	self.collide_part:emit()
@@ -323,6 +323,14 @@ function ship:collide()
 	self.w = w
 	self.h = h
 	self.size_handle = timer.tween(0.5, self, {w=self.ow, h=self.oh}, 'in-bounce')
+end
+
+function ship:boom_rocket_inyourface()
+	self:take_damage(2.3)
+	ct.play('explode')
+	self.collide_part:emit()
+	self.collide_part:emit()
+	self.collide_part:emit()
 end
 
 function ship:get_screen_x()

@@ -22,13 +22,13 @@ function Level:init()
 		local shape = physic.new_shape('circle', ar.w / 2)
 		shape:set_sensor(true)
 		ar.body = physic.new_body(shape, false)
-		ar.body:set_position(ar.x, ar.y)
+		ar.body:set_position(ar.x+ar.w/4, ar.y+ar.w/4)
 	end
 	for _, c in pairs(self.capsules) do
 		local shape = physic.new_shape('circle', c.size)
 		shape:set_sensor(true)
 		c.body = physic.new_body(shape, false)
-		c.body:set_position(c.x, c.y)
+		c.body:set_position(c.x+c.size/2, c.y+c.size/2)
 		c.body.is_capsule = true
 		c.body.parent = c
 		c.is_visible = true
@@ -121,12 +121,12 @@ function Level:draw(offsetx, offsety)
 	local st = self.start
 	local sprite = ct.sprites.start
 	set_color(st.color)
-	draw_sprite_resized(sprite, st.x*R - st.w*R/2, st.y*R - st.h*R/2, st.w*R, st.h*R)
+	draw_sprite_resized(sprite, st.x*R - R, st.y*R - R, st.w*R, st.h*R)
 
 	local st = self.arrival
 	local sprite = ct.sprites.arrival
 	set_color(st.color)
-	draw_sprite_resized(sprite, st.x*R - st.w*R/2, st.y*R - st.h*R/2, st.w*R, st.h*R)
+	draw_sprite_resized(sprite, st.x*R - R, st.y*R - R, st.w*R, st.h*R)
 
 	for _, c in ipairs(self.capsules) do
 		if c.is_visible then
@@ -138,7 +138,7 @@ function Level:draw(offsetx, offsety)
 				sprite = ct.sprites.health_capsule
 				set_color(255, 0, 0)
 			end
-			draw_sprite(sprite, c.x*R-sprite.w/2, c.y*R-sprite.h/2)
+			draw_sprite(sprite, c.x*R, c.y*R)
 		end
 	end
 	for _, t in ipairs(self.turrets) do

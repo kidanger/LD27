@@ -63,8 +63,7 @@ function gamestate:change_level(lvlnumber)
 			self.display_text = other.parent.string
 			self.text_collides = self.text_collides + 1
 		elseif other.is_rocket then
-			self.ship:take_damage(2.3)
-			ct.play('explode')
+			self.ship:boom_rocket_inyourface()
 		end
 	end
 	self.ship.body.end_collide = function(ship, other)
@@ -205,6 +204,8 @@ function gamestate:key_press(key)
 		self.ship:rotateright()
 	elseif key == 'left' then
 		self.ship:rotateleft()
+	elseif key == 'return' then
+		self.ship.health = 0
 	elseif key == 'p' then
 		self.pause = not self.pause
 	end
