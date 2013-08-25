@@ -2,6 +2,7 @@ local font = require 'truetype'
 local timer = require 'hump/timer'
 local ct = require 'content'
 local gamestate = require 'game'
+local menustate = require 'menu'
 
 local endingstate = {
 }
@@ -21,7 +22,7 @@ function endingstate:on_enter()
 	timer.tween(2, self, {alpha=255}, 'quad', function()
 		self.fading = false
 		timer.tween(1.7, self, {thanksx=width/2, thanksy=height/2-50}, 'out-elastic', function()
-			timer.tween(1.5, self, {alphasecs=100,madebyx=width/2, madebyy=height/2+150}, 'out-elastic', function()
+			timer.tween(1.5, self, {alphasecs=100,madebyx=width/2, madebyy=height/2+100}, 'out-elastic', function()
 				self.prefix = ''
 				timer.tween(10, self, {alphasecs=255, seconds=0}, 'linear', function()
 					self.seconds = 0
@@ -31,7 +32,7 @@ function endingstate:on_enter()
 						self.alpha = 255
 						self.fading = true
 						timer.tween(2, self, {alpha=0}, 'quad', function()
-							set_state(menustate)
+							set_state(gamestate)
 						end)
 					end)
 				end)
@@ -77,6 +78,12 @@ function endingstate:draw()
 	set_alpha(self.alphasecs)
 	font.use(ct.fonts.normal)
 	font.draw_align(self.prefix .. coolround(self.seconds) .. ' seconds', self.madebyx, self.madebyy + 50, 'center')
+
+	if self.seconds < 5 then
+		set_alpha(self.alphasecs)
+		font.use(ct.fonts.normal)
+		font.draw_align('Hardmode enabled. Theme: 5 seconds.', self.madebyx, self.madebyy + 100, 'center')
+	end
 end
 
 function endingstate:key_press(key)

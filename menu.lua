@@ -6,19 +6,25 @@ local gamestate = require 'game'
 local menustate = {
 }
 
+local dostuff = true
 function menustate:on_enter()
 	self.r = 0
 	self.g = 0
 	self.b = 0
 	self.text_alpha = 0
+	dostuff = true
 
 	function all()
-		timer.tween(5, self, {r=200, g=200, b=200}, 'bounce', green)
-		timer.tween(12, self, {text_alpha=255}, 'quad')
+		if dostuff then
+			timer.tween(5, self, {r=200, g=200, b=200}, 'bounce', green)
+			timer.tween(12, self, {text_alpha=255}, 'quad')
+		end
 	end
 	function all_off()
-		timer.tween(5, self, {r=200, g=200, b=200}, 'expo', all)
-		timer.tween(4, self, {text_alpha=0}, 'quad')
+		if dostuff then
+			timer.tween(5, self, {r=200, g=200, b=200}, 'expo', all)
+			timer.tween(4, self, {text_alpha=0}, 'quad')
+		end
 	end
 	function green()
 		timer.tween(4, self, {r=0, b=100, g=100}, 'quad', red)
@@ -73,6 +79,7 @@ end
 local harding = false
 function menustate:key_press(key)
 	if key == 'return' or key == 'space' then
+		dostuff = false
 		gamestate:change_level(1)
 		set_state(gamestate)
 	end
