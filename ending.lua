@@ -26,11 +26,12 @@ function endingstate:on_enter()
 				timer.tween(10, self, {alphasecs=255, seconds=0}, 'linear', function()
 					self.seconds = 0
 					timer.add(0.1, function() -- because the 0 won't be displayed otherwise
+						gamestate.hard = true
 						gamestate:change_level(1)
 						self.alpha = 255
 						self.fading = true
 						timer.tween(2, self, {alpha=0}, 'quad', function()
-							set_state(gamestate)
+							set_state(menustate)
 						end)
 					end)
 				end)

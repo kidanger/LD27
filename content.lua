@@ -8,7 +8,7 @@ local ct = {
 	images = {
 	},
 	sprites = {
-		title = {y=64, y=0, w=256, h=256},
+		title = {x=0, y=64, w=852, h=303},
 		ship = {x=0, y=0, w=64, h=64},
 		ship_engine = {x=64, y=0, w=64, h=64},
 		fuel_capsule = {x=128+16, y=0, w=16, h=16},

@@ -18,6 +18,8 @@ local gamestate = {
 	text_width_dst=width*.8,
 	text_handle=nil,
 	text_collides=0,
+
+	hard=false,
 }
 
 physic.create_world(0, 6)
@@ -159,7 +161,7 @@ function gamestate:draw()
 		font.draw_align(text, width/2, 100, 'center')
 	end
 
-	if self.text_width ~= 0 then
+	if self.text_width >= 1 then
 		font.use(ct.fonts.normal)
 		font.use_color(true)
 		local _, h = font.sizeof(self.display_text)

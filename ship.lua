@@ -8,12 +8,15 @@ local ship = {
 	h=2.2,
 	ow=4,
 	oh=2.2,
+	normal_ow=4,
+	normal_oh=2.2,
 	color={255, 255, 255},
 
 	body=nil,
 
 	health=10,
 	max_health=10,
+	normal_max_health=10,
 
 	health_handle=nil,
 	size_handle=nil,
@@ -21,8 +24,10 @@ local ship = {
 	activated=false,
 	fuel=10,
 	max_fuel=10,
+	normal_max_fuel=10,
 
 	engine_power=70,
+	normal_engine_power=70,
 
 	right=false,
 	left=false,
@@ -78,6 +83,22 @@ ship.collide_part:set_offset(10, 10)
 
 function ship:init(level, x, y)
 	assert(not self.body)
+
+	local game = require 'game'
+	if game.hard then
+		self.max_fuel = self.normal_max_fuel / 2
+		self.engine_power = self.normal_engine_power * 0.8
+		self.max_health = self.normal_max_health * 1.5
+		self.ow = self.normal_ow * .7
+		self.oh = self.normal_oh * .7
+	else
+		self.max_fuel = self.normal_max_fuel
+		self.engine_power = self.normal_engine_power
+		self.max_health = self.normal_max_health
+		self.ow = self.normal_ow
+		self.oh = self.normal_oh
+	end
+
 	self.w = self.ow
 	self.h = self.oh
 

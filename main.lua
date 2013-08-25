@@ -12,14 +12,14 @@ width, height = 800, 600
 local state = {}
 
 local gamestate = require 'game'
+local menustate = require 'menu'
 
 --[[===================
 ----======= INIT ======]]
 function init()
 	resize(width, height)
 	ct.load()
-	state = gamestate
-	gamestate:change_level(1)
+	set_state(menustate)
 end
 
 
