@@ -150,7 +150,7 @@ function Level:draw(offsetx, offsety)
 	end
 end
 
-local function load_level(name, hue)
+local function load_level(name, hue, angle)
 	local level = require(name)
 
 	local function gencolors()
@@ -192,17 +192,20 @@ local function load_level(name, hue)
 	end
 
 	level.ratio = 16
+	level.angle = angle
 	return setmetatable(level, Level)
 end
 
 local levels = {
-	load_level('level1', 130),
-	load_level('level2', 100), -- cave
-	load_level('level3', 220), -- go up
-	load_level('level4', 30), -- snail
-	load_level('level5', 280), -- go down
-	load_level('level6', 0), -- first turret
-	load_level('level7', 180), -- first turret
+	load_level('level1', 130, -math.pi*.7),
+	load_level('level2', 100, -math.pi*.2), -- cave
+	load_level('level3', 220, -math.pi*.5), -- go up
+	load_level('level4', 30 , -math.pi*.2), -- snail
+	load_level('level5', 280, -math.pi*.0), -- go down
+	load_level('level6', 0  , -math.pi*.2), -- first turret
+	load_level('level7', 180, -math.pi*.7), -- long
+	load_level('level8', 20 , -math.pi*.15), -- run
+	load_level('level9', 100 , -math.pi*.2), -- reverse cave
 }
 
 return levels

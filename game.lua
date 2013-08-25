@@ -1,5 +1,6 @@
 local physic = require 'physic'
 local font = require 'truetype'
+local timer = require 'hump/timer'
 local ct = require 'content'
 local ship = require 'ship'
 
@@ -13,6 +14,9 @@ local gamestate = {
 	pause = false,
 
 	display_text='',
+	text_width=0,
+	text_width_dst=width*.8,
+	text_handle=nil,
 	text_collides=0,
 }
 
@@ -38,6 +42,12 @@ function gamestate:change_level(lvlnumber)
 
 	self.level = lvlnumber
 	self.display_text = ''
+	if self.text_handle then
+		timer.cancel(self.text_handle)
+	end
+	self.text_handle = nil
+	self.text_width = 0
+	self.text_collides = 0
 
 	local lvl = ct.levels[self.level]
 	lvl:init()
@@ -60,7 +70,13 @@ function gamestate:change_level(lvlnumber)
 			end
 			self.ship.collisions = self.ship.collisions + 1
 		elseif other.is_text then
-			self.display_text = other.parent.string
+			if self.text_collides == 0 then
+				self.display_text = other.parent.string
+				if self.text_handle then
+					timer.cancel(self.text_handle)
+				end
+				self.text_handle = timer.tween(1, self, {text_width=self.text_width_dst}, 'bounce')
+			end
 			self.text_collides = self.text_collides + 1
 		elseif other.is_rocket then
 			self.ship:boom_rocket_inyourface()
@@ -73,7 +89,10 @@ function gamestate:change_level(lvlnumber)
 		elseif other.is_text then
 			self.text_collides = self.text_collides - 1
 			if self.text_collides == 0 then
-				self.display_text = ''
+				if self.text_handle then
+					timer.cancel(self.text_handle)
+				end
+				self.text_handle = timer.tween(1, self, {text_width=0}, 'bounce')
 			end
 		end
 	end
@@ -140,18 +159,20 @@ function gamestate:draw()
 		font.draw_align(text, width/2, 100, 'center')
 	end
 
-	if self.display_text ~= '' then
+	if self.text_width ~= 0 then
 		font.use(ct.fonts.normal)
 		font.use_color(true)
 		local _, h = font.sizeof(self.display_text)
 		local llines = lines(self.display_text)
 		set_color(255,255,255)
 		set_alpha(200)
-		draw_rect(width*.1, height - 130 + h+4, width*.8, (h+4)*#llines+h/4)
-		set_color(0,0,0)
-		set_alpha(200)
-		for i, l in ipairs(llines) do
-			font.draw_align(l, width/2, height - 130 + (h+4)*i, 'center')
+		draw_rect((width-self.text_width)/2, height - 130 + h+4, self.text_width, (h+4)*#llines+h/4)
+		if self.text_width >= self.text_width_dst*.85 then
+			set_color(0,0,0)
+			set_alpha(200)
+			for i, l in ipairs(llines) do
+				font.draw_align(l, width/2, height - 130 + (h+4)*i, 'center')
+			end
 		end
 		font.use_color(false)
 	end
