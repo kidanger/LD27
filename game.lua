@@ -108,33 +108,35 @@ function gamestate:draw()
 
 	pop_offset()
 
-	-- draw health
-	set_alpha(200)
-	set_color(0, 0, 0)
-	local x, y = 10, 10
-	local w = 140
-	local h = 20
-	draw_rect(x, y, w, h)
+	do -- draw health
+		set_alpha(200)
+		set_color(0, 0, 0)
+		local x, y = 20, 20
+		local w = 140
+		local h = 20
+		draw_rect(x, y, w, h)
 
-	set_color(120, 120, 120)
-	x, y = 12, 12
-	w = 136
-	h = 16
-	draw_rect(x, y, w, h)
+		set_color(120, 120, 120)
+		x, y = x + 2, y + 2
+		w = w - 4
+		h = h - 4
+		draw_rect(x, y, w, h)
 
-	set_color(210, 0, 0)
-	draw_rect(x, y, math.ceil(w*(self.ship.health / self.ship.max_health)), h)
-	font.use(ct.fonts.small)
-	set_color(0, 0, 0)
-	font.draw_align('health: ' .. coolround(self.ship.health), x + w/2, y, 'center')
-	
-	-- draw fuel
-	font.use(ct.fonts.big)
-	--set_color(math.min(255, (1 - self.ship.fuel/self.ship.max_fuel)*255), 0, 0)
-	set_color(0,0,0)
-	set_alpha(math.min(255, math.max(100, (1 - self.ship.fuel/self.ship.max_fuel)*255)))
-	local text = 'Fuel: ' .. coolround(self.ship.fuel) .. ' seconds'
-	font.draw_align(text, width/2, 100, 'center')
+		set_color(210, 0, 0)
+		draw_rect(x, y, math.ceil(w*(self.ship.health / self.ship.max_health)), h)
+		font.use(ct.fonts.small)
+		set_color(0, 0, 0)
+		font.draw_align('health: ' .. coolround(self.ship.health), x + w/2, y-1, 'center')
+	end
+
+	do -- draw fuel
+		font.use(ct.fonts.big)
+		--set_color(math.min(255, (1 - self.ship.fuel/self.ship.max_fuel)*255), 0, 0)
+		set_color(0,0,0)
+		set_alpha(math.min(255, math.max(100, (1 - self.ship.fuel/2/self.ship.max_fuel)*255)))
+		local text = 'Fuel: ' .. coolround(self.ship.fuel) .. ' seconds'
+		font.draw_align(text, width/2, 100, 'center')
+	end
 
 	if self.display_text ~= '' then
 		font.use(ct.fonts.normal)

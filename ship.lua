@@ -287,6 +287,16 @@ end
 function ship:regen_fuel()
 	self.fuel = self.max_fuel
 	ct.play('regen_fuel')
+
+	if self.size_handle then
+		timer.cancel(self.size_handle)
+	end
+	self.size_handle = timer.tween(0.5, self, {w=self.ow+1, h=self.oh+1}, 'in-bounce', function()
+		if self.size_handle then
+			timer.cancel(self.size_handle)
+		end
+		self.size_handle = timer.tween(0.5, self, {w=self.ow, h=self.oh}, 'quad')
+	end)
 end
 
 function ship:collide()
