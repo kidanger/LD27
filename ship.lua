@@ -27,6 +27,7 @@ local ship = {
 
 	dying=false,
 	die_ended=false,
+	playing_hurt=0,
 }
 
 function ship:init(level, x, y)
@@ -116,11 +117,15 @@ function ship:update(dt)
 	if self.collisions > 0 then
 		local factor = self.fuel > 0 and 1 or 5
 		self:take_damage(dt * factor)
-		-- sound
+		if self.playing_hurt == 0 then
+			self.playing_hurt = 3
+			timer.addPeriodic(math.random()/4, function() ct.play('littlehurt'); self.playing_hurt = self.playing_hurt - 1 end, 3)
+		end
 	end
 end
 
 function ship:die(duration)
+	ct.play('explode')
 	self.dying = true
 	local function sign() return math.random(1, 2) == 1 and 1 or -1 end
 	local dx, dy = math.random(40, 40)*sign(), math.random(40, 40)*sign()
@@ -148,8 +153,7 @@ function ship:take_damage(dmg)
 	if health < 0 then
 		health = 0
 	end
-	self.health_handle = timer.tween(0.7, self, {health=health})
-	self.health_handle.dst = health
+	self:to_health(health)
 end
 
 function ship:regen_health()
@@ -161,20 +165,31 @@ function ship:regen_health()
 		self.health = self.health_handle.dst
 	end
 	local health = self.max_health
-	self.health_handle = timer.tween(0.7, self, {health=health}, 'bounce')
+	self:to_health(health, 'bounce')
+	ct.play('regen_health')
+end
+
+function ship:to_health(health, type)
+	type = type or 'linear'
+	local handle = timer.tween(0.7, self, {health=health}, type, function()
+		if self.health_handle.dst == health then
+			self.health = health
+		end
+	end)
+	self.health_handle = handle
 	self.health_handle.dst = health
-	-- sound
 end
 
 function ship:regen_fuel()
 	self.fuel = self.max_fuel
+	ct.play('regen_fuel')
 end
 
 function ship:collide()
 	local dmgx, dmgy = self.body:get_linear_velocity()
-	local dmg = (math.abs(dmgx) + math.abs(dmgy)) / 20
+	local dmg = (math.abs(dmgx) + math.abs(dmgy)) / 30
 	self:take_damage(dmg)
-	-- sound
+	ct.play('collide')
 end
 
 function ship:get_screen_x()
@@ -189,6 +204,9 @@ function ship:get_screen_y()
 end
 
 function ship:gofoward()
+	if self.fuel <= 0 and not self.dying then
+		ct.play('out')
+	end
 	self.activated = true
 end
 function ship:stop_gofoward()

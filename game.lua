@@ -47,10 +47,8 @@ function gamestate:change_level(lvlnumber)
 		elseif other.is_capsule and other.parent.is_visible then
 			local c = other.parent
 			if c.type == 'health' then
-				-- sound
 				self.ship:regen_health()
 			else
-				-- sound
 				self.ship:regen_fuel()
 			end
 			c.is_visible = false
@@ -155,7 +153,7 @@ end
 function gamestate:update(dt)
 	if self.arrived then
 		if self.level < ct.max_level then
-			-- sound
+			ct.play('next_level')
 			self:change_level(self.level + 1)
 		else
 			set_state(require 'ending')

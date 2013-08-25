@@ -20,6 +20,11 @@ local ct = {
 	levels = require 'levels',
 }
 
+function ct.play(str)
+	local table = ct.sounds[str]
+	play_sound(table[math.random(1, #table)])
+end
+
 function ct.load()
 	ct.max_level = #ct.levels
 
@@ -30,9 +35,35 @@ function ct.load()
 	ct.fonts.normal = font.load('styllo.ttf', 32)
 	ct.fonts.big = font.load('styllo.ttf', 48)
 
---	ct.sounds.consume_fuel = load_sound('consume_fuel.wav')
---	ct.sounds.collide = load_sound('collide.wav')
---	ct.sounds.explode = load_sound('explode.wav')
+	--ct.sounds.consume_fuel = load_sound('consume_fuel.wav')
+	ct.sounds.collide = {
+		load_sound('collide1.wav'),
+		load_sound('collide2.wav'),
+		load_sound('collide3.wav'),
+		load_sound('collide4.wav'),
+	}
+	ct.sounds.littlehurt = {
+		load_sound('littlehurt1.wav'),
+	}
+	ct.sounds.out = {
+		load_sound('out1.wav'),
+	}
+	ct.sounds.explode = {
+		load_sound('explode1.wav'),
+		load_sound('explode2.wav'),
+	}
+	ct.sounds.next_level = {
+		load_sound('next_level.wav'),
+	}
+	ct.sounds.ending = {
+		load_sound('ending.wav'),
+	}
+	ct.sounds.regen_health = {
+		load_sound('regen_health.wav'),
+	}
+	ct.sounds.regen_fuel = {
+		load_sound('regen_fuel.wav'),
+	}
 end
 
 return ct

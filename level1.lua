@@ -62,7 +62,7 @@ texts={
 	{y=58, x=81, text=1, w=9, h=1},
 },
 textdata={
-	"Hey, use {b100|up} to use the engine,\nand {b100|right/left} to rotate the ship.",
+	"Hey, press {b100|up} to activate the engine,\nand {b100|right/left} to rotate the ship.",
 	"",
 	"Those little things are {big|Fuel Capsules},\nthey help to last more than {r0|g100|b0|10 seconds}.",
 	"And there are some {big|Health Capsules},\nif your health is at zero, your ship {r255|g0|b0|explodes}.",
