@@ -206,6 +206,7 @@ local levels = {
 	load_level('level7', 180, -math.pi*.7), -- long
 	load_level('level8', 20 , -math.pi*.15), -- run
 	load_level('level9', 100 , -math.pi*.2), -- reverse cave
+	load_level('level10', 50 , math.pi*.2), -- last one
 }
 
 return levels

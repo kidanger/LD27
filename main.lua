@@ -54,7 +54,7 @@ end
 local mute = false
 function key_press(key)
 	if key == 'a' then
-		engine_stop()
+		--engine_stop()
 	elseif key == 'm' then
 		mute = not mute
 		if mute then
