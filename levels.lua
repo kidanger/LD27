@@ -133,7 +133,7 @@ function Level:draw(offsetx, offsety)
 			local sprite
 			if c.type == 'fuel' then
 				sprite = ct.sprites.fuel_capsule
-				set_color(20, 20, 255)
+				set_color(255,255,255)
 			else
 				sprite = ct.sprites.health_capsule
 				set_color(255, 0, 0)
@@ -202,6 +202,7 @@ local levels = {
 	load_level('level4', 30), -- snail
 	load_level('level5', 280), -- go down
 	load_level('level6', 0), -- first turret
+	load_level('level7', 180), -- first turret
 }
 
 return levels

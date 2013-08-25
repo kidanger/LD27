@@ -16,7 +16,7 @@ local gamestate = {
 	text_collides=0,
 }
 
-physic.create_world(0, 4.5)
+physic.create_world(0, 6)
 
 physic.on_collision(
 	function (b1, b2)

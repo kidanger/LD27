@@ -81,7 +81,7 @@ texts={
 },
 textdata={
 	"A {small|little} more complicated,\nto make sure you've understood the rules! :)",
-	"{g255|Well done}, you won,\nbut the next ones won't be as easy!",
+	"",
 	"",
 	"",
 },

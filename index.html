@@ -66,9 +66,9 @@
           var progress = document.getElementById('progress');
           if (progress.hidden)
             return;
-          progress.value += 3;
+          progress.value += 1;
           if (progress.value < 100) {
-            setTimeout(function() { Module.setStatus("tick") }, 100);
+            setTimeout(function() { Module.setStatus("tick") }, 150);
           }
         },
         setStatus: function(text) {

@@ -51,11 +51,18 @@ end
 --[[=====================
 ----======= EVENTS ======]]
 
+local mute = false
 function key_press(key)
 	if key == 'a' then
 		engine_stop()
-	end
-	if state.key_press then
+	elseif key == 'm' then
+		mute = not mute
+		if mute then
+			set_sound_volume(0)
+		else
+			set_sound_volume(1)
+		end
+	elseif state.key_press then
 		state:key_press(key)
 	end
 end

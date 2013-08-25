@@ -82,7 +82,7 @@ function ship:init(level, x, y)
 
 	local realw = self.w * 0.8
 	local realh = self.h * 0.5
-	local shape = physic.new_shape('box', realw, realh, realw*0.1, 0)
+	local shape = physic.new_shape('box', realw, realh)
 	self.body = physic.new_body(shape, true)
 	self.body:set_position(x, y)
 	self.body:set_angular_damping(5)
@@ -179,8 +179,10 @@ function ship:update(dt)
 			self.body:apply_linear_impulse(dx, dy)
 			self.fuel = self.fuel - df
 			-- sound
-		else
-			-- sound
+			if self.fuel == 0 then
+				self.fuel_part:stop()
+				ct.play('out')
+			end
 		end
 	end
 	if self.right then

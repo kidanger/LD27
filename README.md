@@ -29,5 +29,3 @@ More levels
 
 Difficulty
 
-Space ship
-

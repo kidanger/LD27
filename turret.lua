@@ -2,7 +2,7 @@ local physic = require 'physic'
 local particle = require 'particle'
 
 local Turret = {
-	range = 40,
+	range = 45,
 	last_fire = -9,
 	reload = 2,
 	tick = 0,
@@ -31,7 +31,7 @@ function Turret:draw()
 	draw_sprite(sprite, self.x*R, self.y*R, transform)
 
 	local sprite = ct.sprites.turret_canon
-	set_color(self.color2)
+	set_color(255,255,255)
 	transform.angle = self.angle
 	draw_sprite(sprite, self.x*R, self.y*R, transform)
 
@@ -58,13 +58,13 @@ function Turret:update(dt)
 
 	local sx, sy = ship.body:get_position()
 	local dx, dy = ship.body:get_linear_velocity()
-	sx, sy = sx + dx*0.5, sy + dy*0.5
+	sx, sy = sx + dx*0.3, sy + dy*0.3
 	local can_see = math.sqrt((sx-self.x)^2 + (sy-self.y)^2) < self.range
 	if can_see then
-		local angle = math.atan2(sy - self.y, sx - self.x) + math.random()*math.pi/12-math.pi/24
+		local angle = math.atan2(sy - self.y, sx - self.x)
 		self.angle = angle
 		if self.last_fire + self.reload < self.tick then
-			self:fire(angle)
+			self:fire(angle + math.random()*math.pi/12-math.pi/24)
 		end
 	else
 		self.angle = math.sin(self.tick + self.offangle) * math.pi
