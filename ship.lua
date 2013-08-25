@@ -100,10 +100,6 @@ function ship:init(level, x, y)
 	self.health_handle = nil
 	self.size_handle = nil
 
-	self.left = false
-	self.right = false
-	self.activated = false
-
 	self.fuel_part:pause()
 	self.collide_part:pause()
 	self.explode_part:pause()
@@ -275,13 +271,17 @@ end
 
 function ship:to_health(health, type)
 	type = type or 'linear'
-	local handle = timer.tween(0.7, self, {health=health}, type, function()
-		if self.health_handle.dst == health then
-			self.health = health
-		end
-	end)
-	self.health_handle = handle
-	self.health_handle.dst = health
+	if health ~= 0 then
+		local handle = timer.tween(0.5, self, {health=health}, type, function()
+			if self.health_handle.dst == health then
+				self.health = health
+			end
+		end)
+		self.health_handle = handle
+		self.health_handle.dst = health
+	else
+		self.health = 0
+	end
 end
 
 function ship:regen_fuel()

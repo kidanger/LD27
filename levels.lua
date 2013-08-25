@@ -144,6 +144,10 @@ function Level:draw(offsetx, offsety)
 	for _, t in ipairs(self.turrets) do
 		t:draw()
 	end
+	set_alpha(255)
+	for _, t in ipairs(self.turrets) do
+		t:draw2()
+	end
 end
 
 local function load_level(name, hue)
@@ -192,11 +196,11 @@ local function load_level(name, hue)
 end
 
 local levels = {
-	--load_level('level1', 130),
-	--load_level('level2', 100), -- cave
-	--load_level('level3', 220), -- go up
-	--load_level('level4', 30), -- snail
-	--load_level('level5', 280), -- go down
+	load_level('level1', 130),
+	load_level('level2', 100), -- cave
+	load_level('level3', 220), -- go up
+	load_level('level4', 30), -- snail
+	load_level('level5', 280), -- go down
 	load_level('level6', 0), -- first turret
 }
 

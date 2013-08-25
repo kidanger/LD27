@@ -45,6 +45,11 @@ function ct.load()
 		load_sound('collide3.wav'),
 		load_sound('collide4.wav'),
 	}
+	ct.sounds.fire = {
+		load_sound('fire1.wav'),
+		load_sound('fire2.wav'),
+		load_sound('fire3.wav'),
+	}
 	ct.sounds.littlehurt = {
 		load_sound('littlehurt1.wav'),
 	}

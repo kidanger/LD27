@@ -63,7 +63,8 @@ function gamestate:change_level(lvlnumber)
 			self.display_text = other.parent.string
 			self.text_collides = self.text_collides + 1
 		elseif other.is_rocket then
-			self.ship:take_damage(5)
+			self.ship:take_damage(2.3)
+			ct.play('explode')
 		end
 	end
 	self.ship.body.end_collide = function(ship, other)
