@@ -18,7 +18,7 @@ function endingstate:on_enter()
 	self.alpha = 0
 	self.fading = true
 
-	timer.tween(2, self, {alpha=200}, 'quad', function()
+	timer.tween(2, self, {alpha=255}, 'quad', function()
 		self.fading = false
 		timer.tween(1.7, self, {thanksx=width/2, thanksy=height/2-50}, 'out-elastic', function()
 			timer.tween(1.5, self, {alphasecs=100,madebyx=width/2, madebyy=height/2+150}, 'out-elastic', function()
@@ -26,10 +26,10 @@ function endingstate:on_enter()
 				timer.tween(10, self, {alphasecs=255, seconds=0}, 'linear', function()
 					self.seconds = 0
 					timer.add(0.1, function() -- because the 0 won't be displayed otherwise
-						self.alpha = 0
+						gamestate:change_level(1)
+						self.alpha = 255
 						self.fading = true
-						timer.tween(2, self, {alpha=200}, 'quad', function()
-							gamestate:change_level(1)
+						timer.tween(2, self, {alpha=0}, 'quad', function()
 							set_state(gamestate)
 						end)
 					end)
@@ -55,6 +55,7 @@ local function coolround(num)
 end
 function endingstate:draw()
 	if self.fading then
+		gamestate:draw()
 		set_color(0, 0, 0)
 		set_alpha(self.alpha)
 		draw_rect(0, 0, width, height)
