@@ -69,14 +69,14 @@ function Level:draw(offsetx, offsety)
 		set_alpha(255)
 		local start = self.start
 		local function sign() return math.random(1, 2) == 1 and 1 or -1 end
-		for i = 1, math.random(20, 40) do
+		for i = 1, 40 do
 			local x = math.random(start.x-20, start.x+20)
 			local y = math.random(start.y-20, start.y+20)
-			local s = math.random(85, 100) / 100
-			local l = math.random(85, 100) / 100
+			local s = math.random(85, 95) / 100
+			local l = math.random(85, 95) / 100
 			set_color(hsl((self.hue+math.random(-5, 5))%360, s, l))
-			local x2, y2 = x+math.random(40, 80)*sign(), y+math.random(70, 150)*sign()
-			local x3, y3 = x+math.random(70, 150)*sign(), y+math.random(40, 80)*sign()
+			local x2, y2 = x+math.random(50, 100)*sign(), y+math.random(90, 170)*sign()
+			local x3, y3 = x+math.random(90, 170)*sign(), y+math.random(50, 100)*sign()
 			draw_triangle(x*R, y*R, x2*R, y2*R, x3*R, y3*R)
 		end
 

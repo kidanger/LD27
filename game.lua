@@ -172,7 +172,7 @@ end
 
 function gamestate:key_press(key)
 	if key == 'up' then
-		self.ship:gofoward()
+		self.ship:goforward()
 	elseif key == 'right' then
 		self.ship:rotateright()
 	elseif key == 'left' then
@@ -181,7 +181,7 @@ function gamestate:key_press(key)
 end
 function gamestate:key_release(key)
 	if key == 'up' then
-		self.ship:stop_gofoward()
+		self.ship:stop_goforward()
 	elseif key == 'right' then
 		self.ship:stop_rotateright()
 	elseif key == 'left' then
@@ -189,6 +189,9 @@ function gamestate:key_release(key)
 	end
 	if key == 'f6' then
 		self.arrived = true
+	end
+	if key == 'f7' then
+		self.ship.health = 0
 	end
 end
 

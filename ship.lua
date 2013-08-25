@@ -1,4 +1,5 @@
 local physic = require 'physic'
+local particle = require 'particle'
 local timer = require 'hump/timer'
 local ct = require 'content'
 
@@ -28,7 +29,46 @@ local ship = {
 	dying=false,
 	die_ended=false,
 	playing_hurt=0,
+
+	collide_part=particle.new_system(0, 0),
+	explode_part=particle.new_system(0, 0),
+	fuel_part=particle.new_system(0, 0),
 }
+
+ship.fuel_part:add_size(0, 5)
+ship.fuel_part:add_size(.3, 10)
+ship.fuel_part:add_size(1, 2)
+ship.fuel_part:add_color(0, 255, 255, 255)
+ship.fuel_part:add_color(0.15, 255, 255, 0)
+ship.fuel_part:add_color(0.3, 255, 0, 0)
+ship.fuel_part:add_color(0.7, 255, 100, 75)
+ship.fuel_part:add_color(1, 0, 0, 0)
+ship.fuel_part:set_lifetime(2.2)
+ship.fuel_part:set_initial_velocity(20)
+ship.fuel_part:set_initial_acceleration(50)
+
+ship.explode_part:add_size(0, 3)
+ship.explode_part:add_size(.4, 10)
+ship.explode_part:add_size(1, 15)
+ship.explode_part:add_color(0, 255, 0, 0)
+ship.explode_part:add_color(0.2, 100, 150, 100, 150, 100, 150)
+ship.explode_part:add_color(1, 0, 0, 0)
+ship.explode_part:set_lifetime(5)
+ship.explode_part:set_initial_velocity(60)
+ship.explode_part:set_initial_acceleration(100)
+ship.explode_part:set_emission_rate(20)
+ship.explode_part:set_offset(30, 30)
+
+ship.collide_part:add_size(0, 5)
+ship.collide_part:add_size(1, 2)
+ship.collide_part:add_color(0, 255, 0, 0)
+ship.collide_part:add_color(0.2, 150, 150, 150)
+ship.collide_part:add_color(1, 0, 50, 0, 50, 0, 50)
+ship.collide_part:set_lifetime(1)
+ship.collide_part:set_initial_velocity(50)
+ship.collide_part:set_initial_acceleration(30)
+ship.collide_part:set_emission_rate(30)
+ship.collide_part:set_offset(10, 10)
 
 function ship:init(level, x, y)
 	assert(not self.body)
@@ -54,6 +94,10 @@ function ship:init(level, x, y)
 	self.left = false
 	self.right = false
 	self.activated = false
+
+	self.fuel_part:pause()
+	self.collide_part:pause()
+	self.explode_part:pause()
 end
 
 function ship:destroy()
@@ -63,6 +107,9 @@ function ship:destroy()
 	if self.health_handle then
 		timer.cancel(self.health_handle)
 	end
+	self.fuel_part:stop()
+	self.collide_part:stop()
+	self.explode_part:stop()
 end
 
 function ship:draw()
@@ -90,10 +137,29 @@ function ship:draw()
 		transform.hfactor = transform.hfactor * -1
 	end
 	draw_sprite(sprite, (x-self.w/2)*R, (y-self.h/2)*R, transform)
-	set_alpha(100)
+
+	local sx, sy = get_offset()
+	set_alpha(150)
+	self.fuel_part:draw(sx, sy)
+	set_alpha(255)
+	self.collide_part:draw(sx, sy)
+	self.explode_part:draw(sx, sy)
 end
 
 function ship:update(dt)
+	do -- update particle systems
+		self.fuel_part:update(dt)
+		self.collide_part:update(dt)
+		self.explode_part:update(dt)
+		local x, y = self.body:get_position()
+		local angle = self.body:get_angle()
+		local R = self.level.ratio
+		x = x*R
+		y = y*R
+		self.fuel_part:set_position(x-math.cos(angle)*self.w/2*R, y-math.sin(angle)*self.h/2*R)
+		self.fuel_part:set_direction(-angle-math.pi/6, -angle+math.pi/6)
+		self.collide_part:set_position(x, y)
+	end
 	if self.activated and self.health > 0 then
 		if self.fuel > 0 then
 			local df = math.min(self.fuel, dt)
@@ -119,29 +185,35 @@ function ship:update(dt)
 		self:take_damage(dt * factor)
 		if self.playing_hurt == 0 then
 			self.playing_hurt = 3
-			timer.addPeriodic(math.random()/4, function() ct.play('littlehurt'); self.playing_hurt = self.playing_hurt - 1 end, 3)
+			timer.addPeriodic(math.random()/4, function()
+				self.collide_part:emit()
+				ct.play('littlehurt')
+				self.playing_hurt = self.playing_hurt - 1
+			end, 3)
 		end
+		local x, y = self.body:get_position()
+		local R = self.level.ratio
 	end
 end
 
 function ship:die(duration)
+	self.fuel_part:stop()
 	ct.play('explode')
 	self.dying = true
 	local function sign() return math.random(1, 2) == 1 and 1 or -1 end
-	local dx, dy = math.random(40, 40)*sign(), math.random(40, 40)*sign()
+	local dx, dy = math.random(-20, 20)*sign(), math.random(-20, 20)*sign()
 	timer.add(duration, function() self.die_ended = true end)
 
-	local cumul = 5
-	local function randomstuff()
-		self.body:set_linear_velocity(dx, dy)
-		cumul = cumul * 1.7
-		self.body:set_angular_velocity(cumul)
-	end
-	randomstuff()
-	timer.addPeriodic(0.3, function()
-		randomstuff()
-		return not self.die_ended and self.dying
-	end, math.max(0, duration/0.3 - 2))
+	self.body:set_angular_velocity(10)
+	self.body:set_angular_damping(0)
+	self.body:set_linear_velocity(dx, dy)
+
+	local x, y = self.body:get_position()
+	local R = self.level.ratio
+	self.explode_part:set_position(x*R, y*R)
+	self.explode_part:set_direction(0, math.pi*2)
+	self.explode_part:set_lifetime(duration)
+	self.explode_part:start()
 end
 
 function ship:take_damage(dmg)
@@ -190,6 +262,14 @@ function ship:collide()
 	local dmg = (math.abs(dmgx) + math.abs(dmgy)) / 30
 	self:take_damage(dmg)
 	ct.play('collide')
+
+	local x, y = self.body:get_position()
+	local R = self.level.ratio
+	self.collide_part:set_position(x*R, y*R)
+	self.collide_part:emit()
+	self.collide_part:emit()
+	self.collide_part:emit()
+	self.collide_part:emit()
 end
 
 function ship:get_screen_x()
@@ -203,13 +283,16 @@ function ship:get_screen_y()
 	return y * R
 end
 
-function ship:gofoward()
+function ship:goforward()
 	if self.fuel <= 0 and not self.dying then
 		ct.play('out')
+	elseif not self.dying then
+		self.fuel_part:start()
 	end
 	self.activated = true
 end
-function ship:stop_gofoward()
+function ship:stop_goforward()
+	self.fuel_part:pause()
 	self.activated = false
 end
 

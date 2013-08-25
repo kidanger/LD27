@@ -23,15 +23,15 @@ Fuel is initialized to a 10 seconds usage. If you gather a fuel capsule, it rest
 TODO
 ====
 
-Sounds
-
-Menu
-Particles
 Tweening!
+Menu
+Pause
 
 Turrets
 
 More levels
 
 Difficulty
+
+Sounds
 
