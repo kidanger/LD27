@@ -16,6 +16,9 @@ local ct = {
 		health_capsule = {x=128+32, y=0, w=16, h=16},
 		start = {x=192, y=0, w=32, h=32},
 		arrival = {x=224, y=0, w=32, h=32},
+		turret_base = {x=256, y=0, w=32, h=32},
+		turret_canon = {x=288, y=0, w=32, h=32},
+		missile = {x=320, y=0, w=32, h=32},
 	},
 	levels = require 'levels',
 }

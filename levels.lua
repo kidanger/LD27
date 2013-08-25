@@ -1,5 +1,6 @@
 local physic = require 'physic'
 local hsl = require 'hsl'
+local Turret = require 'turret'
 
 local Level = {
 	hue=0,
@@ -41,6 +42,15 @@ function Level:init()
 		t.body.parent = t
 		t.string = self.textdata[t.text]
 	end
+	for _, t in pairs(self.turrets) do
+		local shape = physic.new_shape('box', t.size, t.size)
+		t.body = physic.new_body(shape, false)
+		t.body:set_position(t.x + t.size/2, t.y + t.size/2) -- cause the box is centered
+		t.body.is_turret = true
+		t.body.parent = t
+		t.angle = 0
+		t.level = self
+	end
 end
 
 function Level:destroy()
@@ -53,6 +63,9 @@ function Level:destroy()
 	end
 	for _, t in pairs(self.texts) do
 		t.body:destroy()
+	end
+	for _, t in pairs(self.turrets) do
+		t:destroy()
 	end
 end
 
@@ -115,7 +128,7 @@ function Level:draw(offsetx, offsety)
 	set_color(st.color)
 	draw_sprite_resized(sprite, st.x*R - st.w*R/2, st.y*R - st.h*R/2, st.w*R, st.h*R)
 
-	for i, c in pairs(self.capsules) do
+	for _, c in ipairs(self.capsules) do
 		if c.is_visible then
 			local sprite
 			if c.type == 'fuel' then
@@ -125,8 +138,11 @@ function Level:draw(offsetx, offsety)
 				sprite = ct.sprites.health_capsule
 				set_color(255, 0, 0)
 			end
-			draw_sprite_resized(sprite, c.x*R-sprite.w/2, c.y*R-sprite.h/2)
+			draw_sprite(sprite, c.x*R-sprite.w/2, c.y*R-sprite.h/2)
 		end
+	end
+	for _, t in ipairs(self.turrets) do
+		t:draw()
 	end
 end
 
@@ -162,17 +178,26 @@ local function load_level(name, hue)
 		c.size = 0.5
 		c.visible = true
 	end
+	for i, t in pairs(level.turrets) do
+		level.turrets[i] = setmetatable(t, Turret)
+		level.turrets[i]:on_attach()
+	end
+	for _, t in pairs(level.turrets) do
+		t.size = 2
+		t.color, t.color2 = gencolors()
+	end
 
 	level.ratio = 16
 	return setmetatable(level, Level)
 end
 
 local levels = {
-	load_level('level1', 130),
-	load_level('level2', 100), -- cave
-	load_level('level3', 220), -- go up
-	load_level('level4', 30), -- snail
-	load_level('level5', 280), -- go down
+	--load_level('level1', 130),
+	--load_level('level2', 100), -- cave
+	--load_level('level3', 220), -- go up
+	--load_level('level4', 30), -- snail
+	--load_level('level5', 280), -- go down
+	load_level('level6', 0), -- first turret
 }
 
 return levels

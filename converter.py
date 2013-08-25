@@ -8,6 +8,7 @@ START = 255, 0, 0
 ARRIVAL = 0, 255, 0
 FUEL = 0, 0, 255
 HEALTH = 255, 0, 255
+TURRET = 127, 0, 0
 TEXT1 = 0, 255, 255
 TEXT2 = 255, 255, 0
 TEXT3 = 0, 127, 127
@@ -51,6 +52,7 @@ def convert(name):
     arrival = {'x':0, 'y':0}
     boxes = []
     capsules = []
+    turrets = []
     texts = []
 
     data = ['', '', '', '']
@@ -78,6 +80,8 @@ def convert(name):
                 capsules += [{'type':'fuel', 'x': x, 'y': y}]
             elif color == HEALTH:
                 capsules += [{'type':'health', 'x': x, 'y': y}]
+            elif color == TURRET:
+                turrets += [{'x': x, 'y': y}]
             elif color == TEXT1:
                 dx, dy = search(src, x, y, color)
                 texts += [{'x': x, 'y': y, 'w': dx, 'h': dy, 'text': 1}]
@@ -110,10 +114,11 @@ def convert(name):
         assert(False)
 
     luacode = 'local level = {\n'
+    luacode += 'boxes=' + tolua(boxes) + ',\n'
     luacode += 'start=' + tolua(start) + ',\n'
     luacode += 'arrival=' + tolua(arrival) + ',\n'
     luacode += 'capsules=' + tolua(capsules) + ',\n'
-    luacode += 'boxes=' + tolua(boxes) + ',\n'
+    luacode += 'turrets=' + tolua(turrets) + ',\n'
     luacode += 'texts=' + tolua(texts) + ',\n'
     luacode += 'textdata=' + tolua(data) + ',\n'
     luacode += '}\nreturn level'

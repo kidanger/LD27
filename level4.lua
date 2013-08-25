@@ -1,8 +1,4 @@
 local level = {
-start={y=119, x=102},
-arrival={y=84, x=166},
-capsules={
-},
 boxes={
 	{y=79, x=69, w=6, h=79},
 	{y=79, x=75, w=5, h=11},
@@ -47,6 +43,12 @@ boxes={
 	{y=80, x=173, w=9, h=65},
 	{y=145, x=174, w=8, h=1},
 	{y=150, x=174, w=8, h=1},
+},
+start={y=119, x=102},
+arrival={y=84, x=166},
+capsules={
+},
+turrets={
 },
 texts={
 	{y=110, x=107, text=1, w=38, h=21},

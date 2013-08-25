@@ -62,6 +62,8 @@ function gamestate:change_level(lvlnumber)
 		elseif other.is_text then
 			self.display_text = other.parent.string
 			self.text_collides = self.text_collides + 1
+		elseif other.is_rocket then
+			self.ship:take_damage(5)
 		end
 	end
 	self.ship.body.end_collide = function(ship, other)
@@ -186,6 +188,10 @@ function gamestate:update(dt)
 	end
 	if self.ship.die_ended then
 		self:change_level(self.level)
+	end
+	local lvl = ct.levels[self.level]
+	for _, t in ipairs(lvl.turrets) do
+		t:update(dt)
 	end
 	ship:update(dt)
 	physic.update(dt)
